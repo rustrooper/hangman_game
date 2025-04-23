@@ -1,0 +1,50 @@
+@use '../variables.scss' as vars;
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: vars.$font-size-base;
+	font-family: vars.$font-family;
+}
+
+body {
+	display: flex;
+	justify-content: center;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+.page {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	width: 100%;
+	// max-width: 144rem;
+	// padding-top: 2rem;
+	background: linear-gradient(to bottom, #5a8ff2, #5a8ff280);
+}
+
+.game {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	width: 100%;
+	max-width: 80rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+	font-family: vars.$font-family;
+	font-weight: vars.$weight-black;
+	margin: 0;
+}
+
+h1 {
+	font-size: vars.$size-h1;
+}

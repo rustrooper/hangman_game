@@ -1,0 +1,58 @@
+@font-face {
+  font-family: "Alegreya";
+  src: url("/hangman_game/src/assets/fonts/Alegreya-Black.ttf");
+  font-weight: 900;
+}
+@font-face {
+  font-family: "Alegreya";
+  src: url("/hangman_game/src/assets/fonts/Alegreya-ExtraBold.ttf");
+  font-weight: 800;
+}
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+  font-family: "Alegreya";
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.page {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  background: linear-gradient(to bottom, #5a8ff2, rgba(90, 143, 242, 0.5019607843));
+}
+
+.game {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  max-width: 80rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "Alegreya";
+  font-weight: 900;
+  margin: 0;
+}
+
+h1 {
+  font-size: 8rem;
+}
+
+/*# sourceMappingURL=styles.css.map */
