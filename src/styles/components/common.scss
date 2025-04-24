@@ -15,6 +15,8 @@ body {
 	margin: 0;
 	padding: 0;
 	width: 100%;
+	min-height: 100vh;
+	background: linear-gradient(to bottom, #5a8ff2, #5a8ff280);
 }
 
 .page {
@@ -22,9 +24,8 @@ body {
 	justify-content: center;
 	flex-direction: column;
 	width: 100%;
-	// max-width: 144rem;
-	// padding-top: 2rem;
-	background: linear-gradient(to bottom, #5a8ff2, #5a8ff280);
+	max-width: 144rem;
+	padding-top: 2rem;
 }
 
 .game {
