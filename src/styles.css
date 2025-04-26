@@ -24,7 +24,10 @@ body {
   padding: 0;
   width: 100%;
   min-height: 100vh;
+  letter-spacing: 0.5em;
+  color: #f3f3f3;
   background: linear-gradient(to bottom, #5a8ff2, rgba(90, 143, 242, 0.5019607843));
+  text-shadow: -3px -3px 0 #131313, 3px -3px 0 #131313, -3px 3px 0 #131313, 3px 3px 0 #131313;
 }
 
 .page {
@@ -34,21 +37,15 @@ body {
   width: 100%;
   max-width: 144rem;
   padding-top: 2rem;
-}
-
-.game {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  width: 100%;
-  max-width: 80rem;
+  align-items: center;
 }
 
 h1,
 h2,
 h3,
 h4,
-h5 {
+h5,
+button {
   font-family: "Alegreya";
   font-weight: 900;
   margin: 0;
@@ -58,9 +55,107 @@ h1 {
   font-size: 8rem;
 }
 
+button {
+  cursor: pointer;
+}
+
 .header {
   display: flex;
   justify-content: center;
+}
+
+.game {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  max-width: 80rem;
+  align-items: center;
+}
+.game__menu {
+  position: relative;
+  padding: 7.2rem 0;
+  background-color: #954a01;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  box-shadow: 5px 5px 0 0 #131313, -5px -5px 0 0 #f3f3f3;
+  margin-bottom: 28rem;
+  margin-top: 18rem;
+}
+.game__title {
+  margin-bottom: 3rem;
+}
+
+.square {
+  width: 1.524rem;
+  height: 1.524rem;
+  background-color: #f3f3f3;
+  box-shadow: 2px 2px 0 0 #131313;
+  position: absolute;
+}
+.square_top-left {
+  top: 2.5rem;
+  left: 2.5rem;
+}
+.square_top-right {
+  top: 2.5rem;
+  right: 2.5rem;
+}
+.square_bottom-left {
+  bottom: 2.5rem;
+  left: 2.5rem;
+}
+.square_bottom-right {
+  bottom: 2.5rem;
+  right: 2.5rem;
+}
+
+.btn {
+  padding: 1.5rem 3rem;
+  background-color: #219653;
+  border: 2px solid #131313;
+  color: #f3f3f3;
+  font-size: 4rem;
+  letter-spacing: 0.05em;
+  text-shadow: -2px -2px 0 #131313, 2px -2px 0 #131313, -2px 2px 0 #131313, 2px 2px 0 #131313;
+}
+@media (hover: hover) {
+  .btn {
+    transition: all 0.3s ease-out;
+  }
+  .btn:hover, .btn:active {
+    transition: all 0.3s ease-in;
+  }
+}
+@media (hover: hover) {
+  .btn:hover, .btn:active {
+    background-color: #128d06;
+  }
+}
+
+.footer {
+  position: relative;
+}
+.footer__bush {
+  position: absolute;
+  top: -80px;
+  z-index: 1;
+}
+.footer__bush_left {
+  left: 15px;
+}
+.footer__bush_middle {
+  top: -90px;
+  left: 177px;
+}
+.footer__bush_right {
+  right: 70px;
+}
+.footer__ground {
+  position: relative;
+  z-index: 2;
 }
 
 /*# sourceMappingURL=styles.css.map */

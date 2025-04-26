@@ -16,7 +16,11 @@ body {
 	padding: 0;
 	width: 100%;
 	min-height: 100vh;
+	letter-spacing: 0.5em;
+	color: vars.$color-white;
 	background: linear-gradient(to bottom, #5a8ff2, #5a8ff280);
+	text-shadow: -3px -3px 0 vars.$color-black, 3px -3px 0 vars.$color-black,
+		-3px 3px 0 vars.$color-black, 3px 3px 0 vars.$color-black;
 }
 
 .page {
@@ -26,21 +30,15 @@ body {
 	width: 100%;
 	max-width: 144rem;
 	padding-top: 2rem;
-}
-
-.game {
-	display: flex;
-	justify-content: center;
-	flex-direction: column;
-	width: 100%;
-	max-width: 80rem;
+	align-items: center;
 }
 
 h1,
 h2,
 h3,
 h4,
-h5 {
+h5,
+button {
 	font-family: vars.$font-family;
 	font-weight: vars.$weight-black;
 	margin: 0;
@@ -48,4 +46,8 @@ h5 {
 
 h1 {
 	font-size: vars.$size-h1;
+}
+
+button {
+	cursor: pointer;
 }

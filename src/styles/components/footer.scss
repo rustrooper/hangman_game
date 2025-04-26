@@ -1,0 +1,28 @@
+@use '../variables.scss' as vars;
+
+.footer {
+	position: relative;
+
+	&__bush {
+		position: absolute;
+		top: -80px;
+		z-index: 1;
+		&_left {
+			left: 15px;
+		}
+		&_middle {
+			top: -90px;
+			left: 177px;
+		}
+		&_right {
+			right: 70px;
+		}
+	}
+
+	&__ground {
+		position: relative;
+		// top: 0;
+		// left: 0;
+		z-index: 2;
+	}
+}
