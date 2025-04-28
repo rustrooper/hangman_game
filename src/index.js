@@ -20,7 +20,7 @@ class Hangman {
 		this._livesContainerElement = document.createElement('div')
 		this._livesHintElement = document.createElement('p')
 		this._livesNumberElement = document.createElement('span')
-		this._keyboard = document.createElement('div')
+		this._keyboardElement = document.createElement('div')
 
 		this.initGame()
 	}
@@ -90,12 +90,32 @@ class Hangman {
 		this._livesContainerElement.classList.add('game__lives')
 		this._livesHintElement.classList.add('hint')
 		this._livesNumberElement.classList.add('number')
+		this._livesContainerElement.append(this._livesHintElement)
+		this._livesContainerElement.append(this._livesNumberElement)
 
-		this._livesContainerElement.append(livesHintElement)
-		this._livesContainerElement.append(livesNumberElement)
+		this._keyboardElement.classList.add('keyboard')
+		this._alphabet.split('').forEach(letter => {
+			const keyElement = document.createElement('button')
+			keyElement.textContent = letter
 
-		this._gameContainer.appendChild()
+			keyElement.addEventListener('click', e => {
+				this.guessLetter(keyElement.textContent)
+			})
+
+			this._keyboardElement.appendChild(this._keyElement)
+		})
+
+		document.addEventListener('keydown', e => {
+			this.guessLetter(e.key)
+		})
+
+		this._gameContainer.appendChild(this._questionElement)
+		this._gameContainer.appendChild(this._answerElement)
+		this._gameContainer.appendChild(this._keyboardElement)
+		this._gameContainer.appendChild(this._livesContainerElement)
 	}
+
+	updateState() {}
 }
 
 const btnStartGame = document.querySelector('btn_start-game')
