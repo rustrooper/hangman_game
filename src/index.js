@@ -7,11 +7,20 @@ class Hangman {
 			{ qusetion: '', answer: '' },
 			{ qusetion: '', answer: '' },
 		]
+		this._alphabet = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
 		this._lives = 5
 		this._guessedLetters = []
 		this._currentQuestion = ''
 		this._currentAnswer = ''
 		this._displayAnswer = []
+
+		this._gameContainer = document.querySelector('game')
+		this._questionElement = document.createElement('p')
+		this._answerElement = document.createElement('p')
+		this._livesContainerElement = document.createElement('div')
+		this._livesHintElement = document.createElement('p')
+		this._livesNumberElement = document.createElement('span')
+		this._keyboard = document.createElement('div')
 
 		this.initGame()
 	}
@@ -68,6 +77,24 @@ class Hangman {
 			// Добавить рендер кнопки, на которую повесить функцию начала новой игры
 			return
 		}
+	}
+
+	renderNewGame() {
+		this._gameContainer.innerHTML = ''
+
+		this._questionElement.classList.add('game__question')
+
+		this._answerElement.classList.add('game__answer')
+		this._answerElement.textContent = `${this._displayAnswer.join(' ')}`
+
+		this._livesContainerElement.classList.add('game__lives')
+		this._livesHintElement.classList.add('hint')
+		this._livesNumberElement.classList.add('number')
+
+		this._livesContainerElement.append(livesHintElement)
+		this._livesContainerElement.append(livesNumberElement)
+
+		this._gameContainer.appendChild()
 	}
 }
 

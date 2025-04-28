@@ -1,0 +1,35 @@
+@use '../variables.scss' as vars;
+
+%mixin hidden-absolute {
+	position: absolute;
+	visibility: hidden;
+	opacity: 0;
+}
+
+.scaffold {
+	position: relative;
+	&__bottom {
+		@extend %hidden-absolute;
+	}
+
+	&__middle {
+		@extend %hidden-absolute;
+	}
+
+	&__top {
+		@extend %hidden-absolute;
+	}
+
+	&__hangman {
+		@extend %hidden-absolute;
+	}
+
+	&__gpt {
+		@extend %hidden-absolute;
+	}
+}
+
+.open {
+	visibility: visible;
+	opacity: 1;
+}
