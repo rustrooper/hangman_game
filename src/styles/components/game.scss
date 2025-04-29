@@ -7,6 +7,7 @@
 	width: 100%;
 	max-width: 80rem;
 	align-items: center;
+	position: relative;
 
 	&__menu {
 		position: relative;
@@ -28,17 +29,32 @@
 	&__question {
 		font-size: vars.$size-text;
 		font-family: vars.$weight-black;
+		margin-bottom: 5.4rem;
 	}
 
 	&__answer {
 		font-size: vars.$size-answer;
 		font-family: vars.$weight-black;
+		margin-bottom: 2.4rem;
+	}
+
+	&__keyboard {
+		margin-bottom: 5rem;
 	}
 
 	&__lives {
+		position: absolute;
+		right: -15rem;
+		top: 26rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		max-width: 22rem;
 		.hint {
 			font-size: vars.$size-hint;
 			font-family: vars.$weight-black;
+			margin-left: 2rem;
 		}
 		.number {
 			font-size: vars.$size-h1;

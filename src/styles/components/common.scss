@@ -21,6 +21,7 @@ body {
 	background: linear-gradient(to bottom, #5a8ff2, #5a8ff280);
 	text-shadow: -3px -3px 0 vars.$color-black, 3px -3px 0 vars.$color-black,
 		-3px 3px 0 vars.$color-black, 3px 3px 0 vars.$color-black;
+	overflow-x: hidden;
 }
 
 .page {
@@ -50,4 +51,8 @@ h1 {
 
 button {
 	cursor: pointer;
+}
+
+p {
+	margin: 0;
 }

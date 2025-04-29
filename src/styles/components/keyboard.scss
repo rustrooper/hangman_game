@@ -1,4 +1,28 @@
 @use '../variables.scss' as vars;
 
 .keyboard {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	max-width: 57.1rem;
+	gap: 1rem;
+	margin-bottom: 10rem;
+
+	&__letter {
+		border: 3px solid vars.$color-black;
+		background-color: vars.$color-white;
+		// padding: 0 1.7rem;
+		width: 6rem;
+		height: 6rem;
+		font-weight: vars.$weight-extraBold;
+		font-size: vars.$size-text;
+
+		&_red {
+			background-color: vars.$color-red;
+		}
+
+		&_green {
+			background-color: vars.$color-salad;
+		}
+	}
 }

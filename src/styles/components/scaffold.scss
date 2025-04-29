@@ -1,6 +1,6 @@
 @use '../variables.scss' as vars;
 
-%mixin hidden-absolute {
+%hidden-absolute {
 	position: absolute;
 	visibility: hidden;
 	opacity: 0;
