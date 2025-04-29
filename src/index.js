@@ -13,6 +13,7 @@ class Hangman {
 		this._currentQuestion = ''
 		this._currentAnswer = ''
 		this._displayAnswer = []
+		this._letterButtonsMap = new Map()
 
 		this._gameContainer = document.querySelector('.game')
 		this._questionElement = document.createElement('p')
@@ -53,19 +54,23 @@ class Hangman {
 
 		this._guessedLetters.push(letter)
 
+		const currentLetterElement = this._letterButtonsMap.get(letter)
+
 		const isCorrect = this._currentAnswer.includes(letter)
 
 		if (!isCorrect) {
 			this._lives--
+			currentLetterElement.classList.add('keyboard__letter_red')
 		} else {
 			this._currentAnswer.split('').forEach((char, index) => {
 				if (char === letter) {
 					this._displayAnswer[index] = letter
+					currentLetterElement.classList.add('keyboard__letter_green')
 				}
 			})
 		}
+
 		this.checkGameStatus()
-		// this.render()
 		this.updateState()
 	}
 
@@ -109,6 +114,8 @@ class Hangman {
 			keyElement.addEventListener('click', e => {
 				this.guessLetter(keyElement.textContent)
 			})
+
+			this._letterButtonsMap.set(letter, keyElement)
 
 			this._keyboardElement.appendChild(keyElement)
 		})
