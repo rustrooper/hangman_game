@@ -42,11 +42,13 @@ class Hangman {
 		this._guessedLetters = []
 		this._lives = 5
 
-		this._keyboardElement.addEventListener('click', e => {
+		const handleKeyButton = e => {
 			if (e.target.classList.contains('keyboard__letter')) {
 				this.guessLetter(e.target.textContent)
 			}
-		})
+		}
+
+		this._keyboardElement.addEventListener('click', handleKeyButton)
 
 		this.renderNewGame()
 	}
