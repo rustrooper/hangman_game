@@ -22,6 +22,9 @@ class Hangman {
 		this._livesHintElement = document.createElement('p')
 		this._livesNumberElement = document.createElement('span')
 		this._keyboardElement = document.createElement('div')
+		this._restartGameContainerElement = document.createElement('div')
+		this._restartGameTextElement = document.createElement('span')
+		this._restartGameBtnElement = document.createElement('button')
 
 		this.initGame()
 	}
@@ -38,6 +41,12 @@ class Hangman {
 
 		this._guessedLetters = []
 		this._lives = 5
+
+		this._keyboardElement.addEventListener('click', e => {
+			if (e.target.classList.contains('keyboard__letter')) {
+				this.guessLetter(e.target.textContent)
+			}
+		})
 
 		this.renderNewGame()
 	}
@@ -76,17 +85,21 @@ class Hangman {
 
 	checkGameStatus() {
 		if (!this._displayAnswer.includes('_')) {
-			// Удалить все элементы контейнера?
-			// Добавить рендер кнопки, на которую повесить функцию начала новой игры
+			this._gameContainer.innerHTML = ''
+
 			return
 		}
 
 		if (this._lives <= 0) {
-			// Удалить все элементы контейнера?
+			this._gameContainer.innerHTML = ''
 			// Добавить рендер кнопки, на которую повесить функцию начала новой игры
 			return
 		}
 	}
+
+	// handleKeyDown(e) {
+	// 	this.guessLetter(e)
+	// }
 
 	renderNewGame() {
 		this._gameContainer.innerHTML = ''
@@ -111,9 +124,9 @@ class Hangman {
 			keyElement.classList.add('keyboard__letter')
 			keyElement.textContent = letter.toUpperCase()
 
-			keyElement.addEventListener('click', e => {
-				this.guessLetter(keyElement.textContent)
-			})
+			// keyElement.addEventListener('click', e => {
+			// 	this.guessLetter(keyElement.textContent)
+			// })
 
 			this._letterButtonsMap.set(letter, keyElement)
 
