@@ -28,13 +28,13 @@
 
 	&__question {
 		font-size: vars.$size-text;
-		font-family: vars.$weight-black;
+		font-weight: vars.$weight-black;
 		margin-bottom: 5.4rem;
 	}
 
 	&__answer {
 		font-size: vars.$size-answer;
-		font-family: vars.$weight-black;
+		font-weight: vars.$weight-black;
 		margin-bottom: 2.4rem;
 	}
 
@@ -53,7 +53,7 @@
 		max-width: 22rem;
 		.hint {
 			font-size: vars.$size-hint;
-			font-family: vars.$weight-black;
+			font-weight: vars.$weight-black;
 			margin-left: 2rem;
 		}
 		.number {
@@ -62,5 +62,18 @@
 	}
 
 	&__scaffold {
+	}
+
+	&__result {
+		font-size: vars.$size-hint;
+		font-weight: vars.$weight-black;
+		margin-top: 18rem;
+		margin-bottom: 2.5rem;
+		&_lose {
+			color: vars.$color-red;
+		}
+		&_win {
+			color: vars.$color-salad;
+		}
 	}
 }

@@ -46,7 +46,8 @@ h2,
 h3,
 h4,
 h5,
-button {
+button,
+span {
   font-family: "Alegreya";
   font-weight: 900;
   margin: 0;
@@ -95,12 +96,12 @@ p {
 }
 .game__question {
   font-size: 4rem;
-  font-family: 900;
+  font-weight: 900;
   margin-bottom: 5.4rem;
 }
 .game__answer {
   font-size: 7rem;
-  font-family: 900;
+  font-weight: 900;
   margin-bottom: 2.4rem;
 }
 .game__keyboard {
@@ -118,12 +119,25 @@ p {
 }
 .game__lives .hint {
   font-size: 3.5rem;
-  font-family: 900;
+  font-weight: 900;
   margin-left: 2rem;
 }
 .game__lives .number {
   font-size: 8rem;
 }
+.game__result {
+  font-size: 3.5rem;
+  font-weight: 900;
+  margin-top: 18rem;
+  margin-bottom: 2.5rem;
+}
+.game__result_lose {
+  color: #c1480b;
+}
+.game__result_win {
+  color: #89ce09;
+}
+
 .square {
   width: 1.524rem;
   height: 1.524rem;
@@ -170,6 +184,9 @@ p {
     background-color: #128d06;
   }
 }
+.btn_restart {
+  margin-bottom: 28rem;
+}
 
 .footer {
   position: relative;
@@ -194,15 +211,48 @@ p {
   z-index: 2;
 }
 
-.scaffold__gpt, .scaffold__hangman, .scaffold__top, .scaffold__middle, .scaffold__bottom {
+.scaffold__gpt, .scaffold__hangman, .scaffold__rope, .scaffold__balk {
   position: absolute;
-  visibility: hidden;
-  opacity: 0;
+  visibility: visible;
+  opacity: 1;
 }
 
 .scaffold {
   position: relative;
+  width: 38.5rem;
+  height: 30.2rem;
 }
+.scaffold__balk {
+  background-color: #954a01;
+  border: 2px solid #131313;
+}
+.scaffold__balk_bottom {
+  width: 14rem;
+  height: 2.5rem;
+  bottom: -2px;
+}
+.scaffold__balk_middle {
+  height: 25.8rem;
+  width: 2.5rem;
+  bottom: 21px;
+  left: 13px;
+}
+.scaffold__balk_top {
+  width: 30rem;
+  height: 2.5rem;
+}
+.scaffold__rope {
+  width: 1rem;
+  height: 6.6rem;
+}
+.scaffold__hangman {
+  height: 13.784rem;
+  width: 7.047rem;
+}
+.scaffold__gpt {
+  font-size: 10rem;
+}
+
 .open {
   visibility: visible;
   opacity: 1;

@@ -15,6 +15,15 @@ class Hangman {
 		this._displayAnswer = []
 		this._letterButtonsMap = new Map()
 
+		this._scaffoldContainer = document.createElement('div')
+		this._scaffoldBalkBottomElement = document.createElement('div')
+		this._scaffoldBalkMiddleElement = document.createElement('div')
+		this._scaffoldBalkTopElement = document.createElement('div')
+		this._scaffoldRopeElement = document.createElement('img')
+		this._scaffoldManAliveElement = document.createElement('img')
+		this._scaffoldManDeadElement = document.createElement('img')
+		this._scaffoldGPTElement = document.createElement('span')
+
 		this._gameContainer = document.querySelector('.game')
 		this._questionElement = document.createElement('p')
 		this._answerElement = document.createElement('p')
@@ -22,11 +31,30 @@ class Hangman {
 		this._livesHintElement = document.createElement('p')
 		this._livesNumberElement = document.createElement('span')
 		this._keyboardElement = document.createElement('div')
-		this._restartGameContainerElement = document.createElement('div')
-		this._restartGameTextElement = document.createElement('span')
-		this._restartGameBtnElement = document.createElement('button')
+		this._resultElement = document.createElement('span')
+		this._restartBtnElement = document.createElement('button')
 
+		this.addGameHandlers()
 		this.initGame()
+	}
+
+	addGameHandlers() {
+		const handleKeyButton = e => {
+			if (e.target.classList.contains('keyboard__letter')) {
+				this.guessLetter(e.target.textContent)
+			}
+		}
+
+		const handleRestartButton = e => {
+			this.initGame()
+		}
+
+		this._keyboardElement.addEventListener('click', handleKeyButton)
+		this._restartBtnElement.addEventListener('click', handleRestartButton)
+
+		document.addEventListener('keydown', e => {
+			this.guessLetter(e.key)
+		})
 	}
 
 	initGame() {
@@ -42,15 +70,76 @@ class Hangman {
 		this._guessedLetters = []
 		this._lives = 5
 
-		const handleKeyButton = e => {
-			if (e.target.classList.contains('keyboard__letter')) {
-				this.guessLetter(e.target.textContent)
-			}
-		}
-
-		this._keyboardElement.addEventListener('click', handleKeyButton)
-
 		this.renderNewGame()
+	}
+
+	renderNewGame() {
+		this._gameContainer.innerHTML = ''
+		this._keyboardElement.innerHTML = ''
+		this._letterButtonsMap.clear()
+
+		this._scaffoldContainer.classList.add('scaffold')
+		this._scaffoldBalkBottomElement.classList.add(
+			'scaffold__balk',
+			'scaffold__balk_bottom'
+		)
+		this._scaffoldBalkMiddleElement.classList.add(
+			'scaffold__balk',
+			'scaffold__balk_middle'
+		)
+		this._scaffoldBalkTopElement.classList.add(
+			'scaffold__balk',
+			'scaffold__balk_top'
+		)
+		this._scaffoldRopeElement.classList.add('scaffold__rope')
+		this._scaffoldRopeElement.src = '/src/assets/icons/rope.svg'
+		this._scaffoldManAliveElement.classList.add('scaffold__hangman')
+		this._scaffoldManAliveElement.src = '/src/assets/icons/vasia-alive.svg'
+		this._scaffoldGPTElement.classList.add('scaffold__gpt')
+		this._scaffoldGPTElement.textContent = `GPT`
+		this._scaffoldContainer.append(
+			this._scaffoldBalkBottomElement,
+			this._scaffoldBalkMiddleElement,
+			this._scaffoldBalkTopElement,
+			this._scaffoldRopeElement,
+			this._scaffoldManAliveElement,
+			this._scaffoldGPTElement
+		)
+
+		this._questionElement.classList.add('game__question')
+		this._questionElement.textContent = `${this._currentQuestion}`
+
+		this._answerElement.classList.add('game__answer')
+		this._answerElement.textContent = `${this._displayAnswer.join(' ')}`
+
+		this._livesContainerElement.classList.add('game__lives')
+		this._livesHintElement.classList.add('hint')
+		this._livesHintElement.textContent = 'Осталось попыток:'
+		this._livesNumberElement.classList.add('number')
+		this._livesNumberElement.textContent = `${this._lives}`
+		this._livesContainerElement.append(
+			this._livesHintElement,
+			this._livesNumberElement
+		)
+
+		this._keyboardElement.classList.add('keyboard')
+		this._alphabet.split('').forEach(letter => {
+			const keyElement = document.createElement('button')
+			keyElement.classList.add('keyboard__letter')
+			keyElement.textContent = letter.toUpperCase()
+
+			this._letterButtonsMap.set(letter, keyElement)
+
+			this._keyboardElement.appendChild(keyElement)
+		})
+
+		this._gameContainer.append(
+			this._questionElement,
+			this._answerElement,
+			this._keyboardElement,
+			this._livesContainerElement,
+			this._scaffoldContainer
+		)
 	}
 
 	guessLetter(letter) {
@@ -89,60 +178,30 @@ class Hangman {
 		if (!this._displayAnswer.includes('_')) {
 			this._gameContainer.innerHTML = ''
 
-			return
+			this._resultElement.className = ''
+			this._resultElement.classList.add('game__result', 'game__result_win')
+			this._resultElement.textContent = 'WIN!'
+
+			this._gameContainer.appendChild(this._resultElement)
+			this.renderRestartBtn()
 		}
 
 		if (this._lives <= 0) {
 			this._gameContainer.innerHTML = ''
-			// Добавить рендер кнопки, на которую повесить функцию начала новой игры
-			return
+
+			this._resultElement.className = ''
+			this._resultElement.classList.add('game__result', 'game__result_lose')
+			this._resultElement.textContent = 'GAME OVER.'
+
+			this._gameContainer.appendChild(this._resultElement)
+			this.renderRestartBtn()
 		}
 	}
 
-	// handleKeyDown(e) {
-	// 	this.guessLetter(e)
-	// }
-
-	renderNewGame() {
-		this._gameContainer.innerHTML = ''
-
-		this._questionElement.classList.add('game__question')
-		this._questionElement.textContent = `${this._currentQuestion}`
-
-		this._answerElement.classList.add('game__answer')
-		this._answerElement.textContent = `${this._displayAnswer.join(' ')}`
-
-		this._livesContainerElement.classList.add('game__lives')
-		this._livesHintElement.classList.add('hint')
-		this._livesHintElement.textContent = 'Осталось попыток:'
-		this._livesNumberElement.classList.add('number')
-		this._livesNumberElement.textContent = `${this._lives}`
-		this._livesContainerElement.append(this._livesHintElement)
-		this._livesContainerElement.append(this._livesNumberElement)
-
-		this._keyboardElement.classList.add('keyboard')
-		this._alphabet.split('').forEach(letter => {
-			const keyElement = document.createElement('button')
-			keyElement.classList.add('keyboard__letter')
-			keyElement.textContent = letter.toUpperCase()
-
-			// keyElement.addEventListener('click', e => {
-			// 	this.guessLetter(keyElement.textContent)
-			// })
-
-			this._letterButtonsMap.set(letter, keyElement)
-
-			this._keyboardElement.appendChild(keyElement)
-		})
-
-		document.addEventListener('keydown', e => {
-			this.guessLetter(e.key)
-		})
-
-		this._gameContainer.appendChild(this._questionElement)
-		this._gameContainer.appendChild(this._answerElement)
-		this._gameContainer.appendChild(this._keyboardElement)
-		this._gameContainer.appendChild(this._livesContainerElement)
+	renderRestartBtn() {
+		this._restartBtnElement.classList.add('btn', 'btn_restart')
+		this._restartBtnElement.textContent = 'Сыграть еще'
+		this._gameContainer.appendChild(this._restartBtnElement)
 	}
 
 	updateState() {
