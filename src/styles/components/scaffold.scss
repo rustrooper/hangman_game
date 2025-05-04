@@ -2,16 +2,15 @@
 
 %hidden-absolute {
 	position: absolute;
-	// visibility: hidden;
-	// opacity: 0;
-	visibility: visible;
-	opacity: 1;
+	visibility: hidden;
+	opacity: 0;
+	transition: opacity 0.4s ease-in-out;
 }
 
 .scaffold {
 	position: relative;
 	width: 38.5rem;
-	height: 30.2rem;
+	height: 28.4rem;
 
 	&__balk {
 		@extend %hidden-absolute;
@@ -41,21 +40,28 @@
 		@extend %hidden-absolute;
 		width: 1rem;
 		height: 6.6rem;
+		top: 2.5rem;
+		right: 95px;
 	}
 
-	&__hangman {
+	&__man {
 		@extend %hidden-absolute;
 		height: 13.784rem;
 		width: 7.047rem;
+		top: 82px;
+		right: 66px;
 	}
 
 	&__gpt {
 		@extend %hidden-absolute;
 		font-size: vars.$size-gpt;
+		bottom: -33px;
+		right: 0;
 	}
 }
 
 .open {
 	visibility: visible;
 	opacity: 1;
+	transition: opacity 0.4s ease-in-out;
 }

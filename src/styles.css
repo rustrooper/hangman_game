@@ -72,6 +72,16 @@ p {
 
 .game {
   display: flex;
+  justify-content: end;
+  flex-direction: column;
+  width: 100%;
+  max-width: 80rem;
+  min-height: 78.8rem;
+  align-items: center;
+  position: relative;
+}
+.game__wrapper {
+  display: flex;
   justify-content: center;
   flex-direction: column;
   width: 100%;
@@ -103,13 +113,14 @@ p {
   font-size: 7rem;
   font-weight: 900;
   margin-bottom: 2.4rem;
+  letter-spacing: 2rem;
 }
 .game__keyboard {
   margin-bottom: 5rem;
 }
 .game__lives {
   position: absolute;
-  right: -15rem;
+  right: -22rem;
   top: 26rem;
   display: flex;
   flex-direction: column;
@@ -185,7 +196,10 @@ p {
   }
 }
 .btn_restart {
-  margin-bottom: 28rem;
+  margin-bottom: 2.5rem;
+}
+.btn_reset {
+  margin-bottom: 30rem;
 }
 
 .footer {
@@ -211,16 +225,17 @@ p {
   z-index: 2;
 }
 
-.scaffold__gpt, .scaffold__hangman, .scaffold__rope, .scaffold__balk {
+.scaffold__gpt, .scaffold__man, .scaffold__rope, .scaffold__balk {
   position: absolute;
-  visibility: visible;
-  opacity: 1;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
 }
 
 .scaffold {
   position: relative;
   width: 38.5rem;
-  height: 30.2rem;
+  height: 28.4rem;
 }
 .scaffold__balk {
   background-color: #954a01;
@@ -244,18 +259,25 @@ p {
 .scaffold__rope {
   width: 1rem;
   height: 6.6rem;
+  top: 2.5rem;
+  right: 95px;
 }
-.scaffold__hangman {
+.scaffold__man {
   height: 13.784rem;
   width: 7.047rem;
+  top: 82px;
+  right: 66px;
 }
 .scaffold__gpt {
   font-size: 10rem;
+  bottom: -33px;
+  right: 0;
 }
 
 .open {
   visibility: visible;
   opacity: 1;
+  transition: opacity 0.4s ease-in-out;
 }
 
 .keyboard {
@@ -264,7 +286,7 @@ p {
   justify-content: center;
   max-width: 57.1rem;
   gap: 1rem;
-  margin-bottom: 10rem;
+  margin-bottom: 0.6rem;
 }
 .keyboard__letter {
   border: 3px solid #131313;
