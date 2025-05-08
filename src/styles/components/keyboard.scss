@@ -1,10 +1,9 @@
 @use '../variables.scss' as vars;
 
 .keyboard {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	max-width: 57.1rem;
+	display: grid;
+	grid-template-columns: repeat(8, 1fr);
+	grid-template-rows: repeat(4, 1fr);
 	gap: 1rem;
 	margin-bottom: 0.6rem;
 

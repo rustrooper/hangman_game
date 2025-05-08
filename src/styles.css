@@ -27,13 +27,13 @@ body {
   letter-spacing: 0.5em;
   color: #f3f3f3;
   background: linear-gradient(to bottom, #5a8ff2, rgba(90, 143, 242, 0.5019607843));
-  text-shadow: -3px -3px 0 #131313, 3px -3px 0 #131313, -3px 3px 0 #131313, 3px 3px 0 #131313;
+  text-shadow: -1px -2px 2px #131313, 1px -2px 2px #131313, -1px 2px 2px #131313, 1px 2px 2px #131313;
   overflow-x: hidden;
 }
 
 .page {
   display: flex;
-  justify-content: center;
+  justify-content: end;
   flex-direction: column;
   width: 100%;
   max-width: 144rem;
@@ -69,6 +69,9 @@ p {
   display: flex;
   justify-content: center;
 }
+.header .decoration_clouds {
+  width: 100%;
+}
 
 .game {
   display: flex;
@@ -76,7 +79,7 @@ p {
   flex-direction: column;
   width: 100%;
   max-width: 80rem;
-  min-height: 78.8rem;
+  flex: 2;
   align-items: center;
   position: relative;
 }
@@ -204,6 +207,7 @@ p {
 
 .footer {
   position: relative;
+  display: flex;
 }
 .footer__bush {
   position: absolute;
@@ -214,13 +218,14 @@ p {
   left: 15px;
 }
 .footer__bush_middle {
-  top: -90px;
+  top: -110px;
   left: 177px;
 }
 .footer__bush_right {
   right: 70px;
 }
 .footer__ground {
+  width: 100%;
   position: relative;
   z-index: 2;
 }
@@ -281,10 +286,9 @@ p {
 }
 
 .keyboard {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  max-width: 57.1rem;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(4, 1fr);
   gap: 1rem;
   margin-bottom: 0.6rem;
 }

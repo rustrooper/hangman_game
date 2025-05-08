@@ -2,6 +2,7 @@
 
 .footer {
 	position: relative;
+	display: flex;
 
 	&__bush {
 		position: absolute;
@@ -11,7 +12,7 @@
 			left: 15px;
 		}
 		&_middle {
-			top: -90px;
+			top: -110px;
 			left: 177px;
 		}
 		&_right {
@@ -20,6 +21,7 @@
 	}
 
 	&__ground {
+		width: 100%;
 		position: relative;
 		z-index: 2;
 	}

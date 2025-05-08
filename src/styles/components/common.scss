@@ -18,15 +18,19 @@ body {
 	min-height: 100vh;
 	letter-spacing: 0.5em;
 	color: vars.$color-white;
-	background: linear-gradient(to bottom, #5a8ff2, #5a8ff280);
-	text-shadow: -3px -3px 0 vars.$color-black, 3px -3px 0 vars.$color-black,
-		-3px 3px 0 vars.$color-black, 3px 3px 0 vars.$color-black;
+	background: linear-gradient(
+		to bottom,
+		vars.$color-blue,
+		vars.$color-dark-blue
+	);
+	text-shadow: -1px -2px 2px vars.$color-black, 1px -2px 2px vars.$color-black,
+		-1px 2px 2px vars.$color-black, 1px 2px 2px vars.$color-black;
 	overflow-x: hidden;
 }
 
 .page {
 	display: flex;
-	justify-content: center;
+	justify-content: end;
 	flex-direction: column;
 	width: 100%;
 	max-width: 144rem;

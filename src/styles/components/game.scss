@@ -6,7 +6,7 @@
 	flex-direction: column;
 	width: 100%;
 	max-width: 80rem;
-	min-height: 78.8rem;
+	flex: 2;
 	align-items: center;
 	position: relative;
 
@@ -51,7 +51,6 @@
 	}
 
 	&__keyboard {
-		// margin-bottom: 5rem;
 		margin-bottom: 5rem;
 	}
 
@@ -64,11 +63,13 @@
 		justify-content: center;
 		align-items: center;
 		max-width: 22rem;
+
 		.hint {
 			font-size: vars.$size-hint;
 			font-weight: vars.$weight-black;
 			margin-left: 2rem;
 		}
+
 		.number {
 			font-size: vars.$size-h1;
 		}
@@ -79,9 +80,11 @@
 		font-weight: vars.$weight-black;
 		margin-top: 18rem;
 		margin-bottom: 2.5rem;
+
 		&_lose {
 			color: vars.$color-red;
 		}
+
 		&_win {
 			color: vars.$color-salad;
 		}
