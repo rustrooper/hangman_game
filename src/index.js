@@ -1,49 +1,17 @@
 class Hangman {
-	constructor() {
-		this._questions = [
-			{ id: 1, question: 'Всё в javascript - это?', answer: 'объект' },
-			{
-				id: 2,
-				question: 'Вёрстка, где элементы подстраиваются под размер экрана?',
-				answer: 'адаптивная',
-			},
-			{
-				id: 3,
-				question: 'Готовый блок кода для повторного использования',
-				answer: 'компонент',
-			},
-			{
-				id: 4,
-				question: 'Инструмент для проверки кода на ошибки',
-				answer: 'линтер',
-			},
-			{
-				id: 5,
-				question:
-					'Технология, которая позволяет обновлять часть страницы без перезагрузки',
-				answer: 'асинхронный запрос',
-			},
-			{
-				id: 6,
-				question:
-					'Специальные правила для адаптации сайта под мобильные устройства',
-				answer: 'медиа запросы',
-			},
-			{
-				id: 7,
-				question:
-					'Функция, которая передаётся другой функции для вызова позже.',
-				answer: 'колбэк',
-			},
-			{
-				id: 8,
-				question: 'Эффект при наведении',
-				answer: 'ховер',
-			},
-		]
-		this._alphabet = 'абвгдежзийклмнопрстуфхцчшщъыьэюя'
-		this._lives = 5
-		this._guessedLetters = []
+	constructor(questions, alphabet, lives) {
+		this.initConsts(questions, alphabet, lives)
+		this.initDOMElements()
+		this.addGameHandlers()
+		this.initGame()
+	}
+
+	initConsts(questions, alphabet, lives) {
+		this._questions = questions
+		this._alphabet = alphabet
+		this._lives = lives
+
+		this._guessedLetters = new Set()
 		this._currentQuestion = ''
 		this._currentAnswer = ''
 		this._displayAnswer = []
@@ -51,15 +19,41 @@ class Hangman {
 		this._solvedQuestionsIDs = new Set()
 		this._unsolvedQuestions = []
 		this._randomIndex
+	}
 
-		this._scaffoldContainer = document.createElement('div')
-		this._scaffoldBalkBottomElement = document.createElement('div')
-		this._scaffoldBalkMiddleElement = document.createElement('div')
-		this._scaffoldBalkTopElement = document.createElement('div')
-		this._scaffoldRopeElement = document.createElement('img')
-		this._scaffoldManAliveElement = document.createElement('img')
-		this._scaffoldManDeadElement = document.createElement('img')
-		this._scaffoldGPTElement = document.createElement('span')
+	initDOMElements() {
+		this._scaffoldContainer = this.createDOMElement('div', {
+			class: 'scaffold',
+		})
+
+		this._scaffoldBalkBottomElement = this.createDOMElement('div', {
+			class: 'scaffold__balk scaffold__balk_bottom',
+		})
+
+		this._scaffoldBalkMiddleElement = this.createDOMElement('div', {
+			class: 'scaffold__balk scaffold__balk_middle',
+		})
+
+		this._scaffoldBalkTopElement = this.createDOMElement('div', {
+			class: 'scaffold__balk scaffold__balk_top',
+		})
+		// this._scaffoldBalkMiddleElement = document.createElement('div')
+		// this._scaffoldBalkTopElement = document.createElement('div')
+		this._scaffoldRopeElement = this.createDOMElement('img', {
+			class: 'scaffold__rope',
+			src: '/src/assets/icons/rope.svg',
+		})
+		this._scaffoldManAliveElement = this.createDOMElement('img', {
+			class: 'scaffold__man',
+			src: '/src/assets/icons/vasia-alive.svg',
+		})
+		this._scaffoldManDeadElement = this.createDOMElement('img', {
+			class: 'scaffold__man',
+			src: '/src/assets/icons/vasia-dead.svg',
+		})
+		this._scaffoldGPTElement = this.createDOMElement('span', {
+			class: 'scaffold__gpt',
+		})
 
 		this._gameContainer = document.querySelector('.game')
 		this._gameWrapperElement = document.createElement('div')
@@ -73,9 +67,22 @@ class Hangman {
 		this._restartBtnElement = document.createElement('button')
 		this._resetBtnElement = document.createElement('button')
 		this._finishedGameTextElement = document.createElement('span')
+	}
 
-		this.addGameHandlers()
-		this.initGame()
+	createDOMElement(tagName, attributes = {}, textContent = '') {
+		const element = document.createElement(tagName)
+
+		for (const [key, value] of Object.entries(attributes)) {
+			if (key === 'class') {
+				element.classList.add(...value.split(' '))
+			} else {
+				element.setAttribute(key, value)
+			}
+		}
+
+		if (typeof textContent === 'string') element.textContent = textContent
+
+		return element
 	}
 
 	addGameHandlers() {
@@ -144,7 +151,7 @@ class Hangman {
 			.split('')
 			.map(char => (char === ' ' ? ' ' : '_'))
 
-		this._guessedLetters = []
+		this._guessedLetters.clear()
 		this._lives = 5
 
 		this.renderNewGame()
@@ -159,19 +166,19 @@ class Hangman {
 			child.classList.remove('open')
 		})
 
-		this._scaffoldContainer.classList.add('scaffold')
-		this._scaffoldBalkBottomElement.classList.add(
-			'scaffold__balk',
-			'scaffold__balk_bottom'
-		)
-		this._scaffoldBalkMiddleElement.classList.add(
-			'scaffold__balk',
-			'scaffold__balk_middle'
-		)
-		this._scaffoldBalkTopElement.classList.add(
-			'scaffold__balk',
-			'scaffold__balk_top'
-		)
+		// this._scaffoldContainer.classList.add('scaffold')
+		// this._scaffoldBalkBottomElement.classList.add(
+		// 	'scaffold__balk',
+		// 	'scaffold__balk_bottom'
+		// )
+		// this._scaffoldBalkMiddleElement.classList.add(
+		// 	'scaffold__balk',
+		// 	'scaffold__balk_middle'
+		// )
+		// this._scaffoldBalkTopElement.classList.add(
+		// 	'scaffold__balk',
+		// 	'scaffold__balk_top'
+		// )
 		this._scaffoldRopeElement.classList.add('scaffold__rope')
 		this._scaffoldRopeElement.src = '/src/assets/icons/rope.svg'
 		this._scaffoldManAliveElement.classList.add('scaffold__man')
@@ -207,7 +214,7 @@ class Hangman {
 		)
 
 		this._keyboardElement.classList.add('keyboard')
-		this._alphabet.split('').forEach(letter => {
+		this._alphabet.forEach(letter => {
 			const keyElement = document.createElement('button')
 			keyElement.classList.add('keyboard__letter')
 			keyElement.textContent = letter.toUpperCase()
@@ -234,14 +241,9 @@ class Hangman {
 	guessLetter(letter) {
 		letter = letter.toLowerCase()
 
-		if (
-			this._guessedLetters.includes(letter) ||
-			!this._alphabet.includes(letter)
-		) {
-			return
-		}
+		if (this._guessedLetters.has(letter) || !this._alphabet.has(letter)) return
 
-		this._guessedLetters.push(letter)
+		this._guessedLetters.add(letter)
 
 		const currentLetterElement = this._letterButtonsMap.get(letter)
 
@@ -329,7 +331,49 @@ class Hangman {
 }
 
 const btnStartGame = document.querySelector('.btn_start-game')
+const alphabet = new Set('абвгдежзийклмнопрстуфхцчшщъыьэюя')
+const lives = 5
+const questions = [
+	{ id: 1, question: 'Всё в javascript - это?', answer: 'объект' },
+	{
+		id: 2,
+		question: 'Вёрстка, где элементы подстраиваются под размер экрана?',
+		answer: 'адаптивная',
+	},
+	{
+		id: 3,
+		question: 'Готовый блок кода для повторного использования',
+		answer: 'компонент',
+	},
+	{
+		id: 4,
+		question: 'Инструмент для проверки кода на ошибки',
+		answer: 'линтер',
+	},
+	{
+		id: 5,
+		question:
+			'Технология, которая позволяет обновлять часть страницы без перезагрузки',
+		answer: 'асинхронный запрос',
+	},
+	{
+		id: 6,
+		question:
+			'Специальные правила для адаптации сайта под мобильные устройства',
+		answer: 'медиа запросы',
+	},
+	{
+		id: 7,
+		question: 'Функция, которая передаётся другой функции для вызова позже.',
+		answer: 'колбэк',
+	},
+	{
+		id: 8,
+		question: 'Эффект при наведении',
+		answer: 'ховер',
+	},
+]
 
 btnStartGame.addEventListener('click', () => {
-	new Hangman()
+	new Hangman(questions, alphabet)
 })
