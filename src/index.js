@@ -1,27 +1,64 @@
 class Hangman {
-	constructor(questions, alphabet, lives) {
-		this.initConsts(questions, alphabet, lives)
+	constructor(questions, alphabet, initialLives) {
+		this.initConsts(questions, alphabet, initialLives)
 		this.initDOMElements()
-		this.addGameHandlers()
-		this.initGame()
+		this.initGameHandlers()
+		this.renderStartMenu()
 	}
 
-	initConsts(questions, alphabet, lives) {
+	initConsts(questions, alphabet, initialLives) {
 		this._questions = questions
 		this._alphabet = alphabet
-		this._lives = lives
+		this._initialLives = initialLives
 
 		this._guessedLetters = new Set()
-		this._currentQuestion = ''
-		this._currentAnswer = ''
-		this._displayAnswer = []
+		this._currentQuestion
+		this._currentAnswer
+		this._displayAnswer
 		this._letterButtonsMap = new Map()
-		this._solvedQuestionsIDs = new Set()
-		this._unsolvedQuestions = []
+		this._solvedQuestionsIDs
+		this._unsolvedQuestions
+		this._currentLives
 		this._randomIndex
 	}
 
 	initDOMElements() {
+		this._gameMenu = this.createDOMElement('div', {
+			class: 'game__menu',
+		})
+
+		this._squareTopLeftElem = this.createDOMElement('span', {
+			class: 'square square_top-left',
+		})
+
+		this._squareTopRightElem = this.createDOMElement('span', {
+			class: 'square square_top-right',
+		})
+
+		this._squareBottomLeftElem = this.createDOMElement('span', {
+			class: 'square square_bottom-left',
+		})
+
+		this._squareBottomRightElem = this.createDOMElement('span', {
+			class: 'square square_bottom-right',
+		})
+
+		this._gameTitleElem = this.createDOMElement(
+			'h1',
+			{
+				class: 'game__title',
+			},
+			'IT виселица'
+		)
+
+		this._startBtnElem = this.createDOMElement(
+			'button',
+			{
+				class: 'btn btn_start-game',
+			},
+			'Новая игра'
+		)
+
 		this._scaffoldContainer = this.createDOMElement('div', {
 			class: 'scaffold',
 		})
@@ -37,8 +74,6 @@ class Hangman {
 		this._scaffoldBalkTopElement = this.createDOMElement('div', {
 			class: 'scaffold__balk scaffold__balk_top',
 		})
-		// this._scaffoldBalkMiddleElement = document.createElement('div')
-		// this._scaffoldBalkTopElement = document.createElement('div')
 		this._scaffoldRopeElement = this.createDOMElement('img', {
 			class: 'scaffold__rope',
 			src: '/src/assets/icons/rope.svg',
@@ -51,22 +86,64 @@ class Hangman {
 			class: 'scaffold__man',
 			src: '/src/assets/icons/vasia-dead.svg',
 		})
-		this._scaffoldGPTElement = this.createDOMElement('span', {
-			class: 'scaffold__gpt',
-		})
+		this._scaffoldGPTElement = this.createDOMElement(
+			'span',
+			{
+				class: 'scaffold__gpt',
+			},
+			'GPT'
+		)
 
 		this._gameContainer = document.querySelector('.game')
-		this._gameWrapperElement = document.createElement('div')
-		this._questionElement = document.createElement('p')
-		this._answerElement = document.createElement('p')
-		this._livesContainerElement = document.createElement('div')
-		this._livesHintElement = document.createElement('p')
-		this._livesNumberElement = document.createElement('span')
-		this._keyboardElement = document.createElement('div')
-		this._resultElement = document.createElement('span')
-		this._restartBtnElement = document.createElement('button')
-		this._resetBtnElement = document.createElement('button')
-		this._finishedGameTextElement = document.createElement('span')
+		this._gameWrapperElement = this.createDOMElement('div', {
+			class: 'game__wrapper',
+		})
+		this._questionElement = this.createDOMElement('p', {
+			class: 'game__question',
+		})
+		this._answerElement = this.createDOMElement('p', {
+			class: 'game__answer',
+		})
+		this._livesContainerElement = this.createDOMElement('div', {
+			class: 'game__lives',
+		})
+		this._livesHintElement = this.createDOMElement(
+			'p',
+			{
+				class: 'hint',
+			},
+			'Осталось попыток:'
+		)
+		this._livesNumberElement = this.createDOMElement('span', {
+			class: 'number',
+		})
+		this._keyboardElement = this.createDOMElement('div', {
+			class: 'keyboard',
+		})
+		this._resultElement = this.createDOMElement('span', {
+			class: 'game__result',
+		})
+		this._restartBtnElement = this.createDOMElement(
+			'button',
+			{
+				class: 'btn btn_restart',
+			},
+			'Сыграть еще'
+		)
+		this._resetBtnElement = this.createDOMElement(
+			'button',
+			{
+				class: 'btn btn_reset',
+			},
+			'Начать заново'
+		)
+		this._finishedGameTextElement = this.createDOMElement(
+			'span',
+			{
+				class: 'game__result',
+			},
+			'Поздравляю! Вы отгадали все вопросы!'
+		)
 	}
 
 	createDOMElement(tagName, attributes = {}, textContent = '') {
@@ -85,7 +162,7 @@ class Hangman {
 		return element
 	}
 
-	addGameHandlers() {
+	initGameHandlers() {
 		const handleKeyButton = e => {
 			if (e.target.classList.contains('keyboard__letter')) {
 				this.guessLetter(e.target.textContent)
@@ -93,48 +170,40 @@ class Hangman {
 		}
 
 		const handleRestartButton = e => {
-			this.initGame()
+			this.initNewGame()
 		}
 
 		const handleResetGameButton = e => {
 			localStorage.removeItem('solvedQuestionsIDs')
-			this.initGame()
+			this.initNewGame()
 		}
 
 		this._keyboardElement.addEventListener('click', handleKeyButton)
 		this._restartBtnElement.addEventListener('click', handleRestartButton)
 		this._resetBtnElement.addEventListener('click', handleResetGameButton)
+		this._startBtnElem.addEventListener('click', handleRestartButton)
 
 		document.addEventListener('keydown', e => {
 			this.guessLetter(e.key)
 		})
 	}
 
-	renderFinishedGame() {
-		this._gameContainer.innerHTML = ''
-		this._gameWrapperElement.innerHTML = ''
-
-		this._finishedGameTextElement.classList.add('game__result')
-		this._finishedGameTextElement.textContent =
-			'Поздравляю! Вы отгадали все вопросы!'
-		this._resetBtnElement.classList.add('btn', 'btn_reset')
-		this._resetBtnElement.textContent = 'Начать заново'
-
-		this._gameContainer.append(
-			this._finishedGameTextElement,
-			this._resetBtnElement
+	renderStartMenu() {
+		this._gameMenu.append(
+			this._squareTopLeftElem,
+			this._squareTopRightElem,
+			this._squareBottomLeftElem,
+			this._squareBottomRightElem,
+			this._gameTitleElem,
+			this._startBtnElem
 		)
+		this._gameContainer.append(this._gameMenu)
 	}
 
-	initGame() {
-		this._solvedQuestionsIDs = new Set(
-			JSON.parse(localStorage.getItem('solvedQuestionsIDs') || '[]')
-		)
-		this._unsolvedQuestions = this._questions.filter(
-			question => !this._solvedQuestionsIDs.has(question.id)
-		)
+	initNewGame() {
+		this.getRandomUnsolved()
 
-		if (!this._unsolvedQuestions?.length) {
+		if (!this._unsolvedQuestions.length) {
 			this.renderFinishedGame()
 			return
 		}
@@ -143,18 +212,27 @@ class Hangman {
 			Math.random() * this._unsolvedQuestions.length
 		)
 
-		this._currentQuestion = this._unsolvedQuestions[this._randomIndex].question
-		this._currentAnswer =
-			this._unsolvedQuestions[this._randomIndex].answer.toLowerCase()
+		const { question, answer } = this._unsolvedQuestions[this._randomIndex]
+		this._currentQuestion = question
+		this._currentAnswer = answer.toLowerCase()
 
 		this._displayAnswer = this._currentAnswer
 			.split('')
 			.map(char => (char === ' ' ? ' ' : '_'))
 
 		this._guessedLetters.clear()
-		this._lives = 5
+		this._currentLives = this._initialLives
 
 		this.renderNewGame()
+	}
+
+	getRandomUnsolved() {
+		this._solvedQuestionsIDs = new Set(
+			JSON.parse(localStorage.getItem('solvedQuestionsIDs') || '[]')
+		)
+		this._unsolvedQuestions = this._questions.filter(
+			question => !this._solvedQuestionsIDs.has(question.id)
+		)
 	}
 
 	renderNewGame() {
@@ -166,27 +244,6 @@ class Hangman {
 			child.classList.remove('open')
 		})
 
-		// this._scaffoldContainer.classList.add('scaffold')
-		// this._scaffoldBalkBottomElement.classList.add(
-		// 	'scaffold__balk',
-		// 	'scaffold__balk_bottom'
-		// )
-		// this._scaffoldBalkMiddleElement.classList.add(
-		// 	'scaffold__balk',
-		// 	'scaffold__balk_middle'
-		// )
-		// this._scaffoldBalkTopElement.classList.add(
-		// 	'scaffold__balk',
-		// 	'scaffold__balk_top'
-		// )
-		this._scaffoldRopeElement.classList.add('scaffold__rope')
-		this._scaffoldRopeElement.src = '/src/assets/icons/rope.svg'
-		this._scaffoldManAliveElement.classList.add('scaffold__man')
-		this._scaffoldManAliveElement.src = '/src/assets/icons/vasia-alive.svg'
-		this._scaffoldManDeadElement.classList.add('scaffold__man')
-		this._scaffoldManDeadElement.src = '/src/assets/icons/vasia-dead.svg'
-		this._scaffoldGPTElement.classList.add('scaffold__gpt')
-		this._scaffoldGPTElement.textContent = `GPT`
 		this._scaffoldContainer.append(
 			this._scaffoldBalkBottomElement,
 			this._scaffoldBalkMiddleElement,
@@ -197,23 +254,15 @@ class Hangman {
 			this._scaffoldGPTElement
 		)
 
-		this._questionElement.classList.add('game__question')
 		this._questionElement.textContent = `${this._currentQuestion}`
-
-		this._answerElement.classList.add('game__answer')
 		this._answerElement.textContent = `${this._displayAnswer.join('')}`
+		this._livesNumberElement.textContent = `${this._currentLives}`
 
-		this._livesContainerElement.classList.add('game__lives')
-		this._livesHintElement.classList.add('hint')
-		this._livesHintElement.textContent = 'Осталось попыток:'
-		this._livesNumberElement.classList.add('number')
-		this._livesNumberElement.textContent = `${this._lives}`
 		this._livesContainerElement.append(
 			this._livesHintElement,
 			this._livesNumberElement
 		)
 
-		this._keyboardElement.classList.add('keyboard')
 		this._alphabet.forEach(letter => {
 			const keyElement = document.createElement('button')
 			keyElement.classList.add('keyboard__letter')
@@ -224,7 +273,6 @@ class Hangman {
 			this._keyboardElement.appendChild(keyElement)
 		})
 
-		this._gameWrapperElement.classList.add('game__wrapper')
 		this._gameWrapperElement.append(
 			this._questionElement,
 			this._answerElement,
@@ -250,7 +298,7 @@ class Hangman {
 		const isCorrect = this._currentAnswer.includes(letter)
 
 		if (!isCorrect) {
-			this._lives--
+			this._currentLives--
 			currentLetterElement.classList.add('keyboard__letter_red')
 		} else {
 			this._currentAnswer.split('').forEach((char, index) => {
@@ -285,7 +333,7 @@ class Hangman {
 			this.renderRestartBtn()
 		}
 
-		if (this._lives <= 0) {
+		if (this._currentLives <= 0) {
 			this._gameWrapperElement.innerHTML = ''
 
 			this._resultElement.className = ''
@@ -297,16 +345,10 @@ class Hangman {
 		}
 	}
 
-	renderRestartBtn() {
-		this._restartBtnElement.classList.add('btn', 'btn_restart')
-		this._restartBtnElement.textContent = 'Сыграть еще'
-		this._gameWrapperElement.appendChild(this._restartBtnElement)
-	}
-
 	updateState() {
-		this._livesNumberElement.textContent = `${this._lives}`
+		this._livesNumberElement.textContent = `${this._currentLives}`
 		this._answerElement.textContent = `${this._displayAnswer.join('')}`
-		switch (this._lives) {
+		switch (this._currentLives) {
 			case 4:
 				this._scaffoldBalkBottomElement.classList.add('open')
 				break
@@ -328,9 +370,31 @@ class Hangman {
 				break
 		}
 	}
+
+	renderRestartBtn() {
+		// this._restartBtnElement.classList.add('btn', 'btn_restart')
+		// this._restartBtnElement.textContent = 'Сыграть еще'
+		this._gameWrapperElement.appendChild(this._restartBtnElement)
+	}
+
+	renderFinishedGame() {
+		this._gameContainer.innerHTML = ''
+		this._gameWrapperElement.innerHTML = ''
+
+		this._finishedGameTextElement.classList.add('game__result')
+		this._finishedGameTextElement.textContent =
+			'Поздравляю! Вы отгадали все вопросы!'
+		this._resetBtnElement.classList.add('btn', 'btn_reset')
+		this._resetBtnElement.textContent = 'Начать заново'
+
+		this._gameContainer.append(
+			this._finishedGameTextElement,
+			this._resetBtnElement
+		)
+	}
 }
 
-const btnStartGame = document.querySelector('.btn_start-game')
+// const btnStartGame = document.querySelector('.btn_start-game')
 const alphabet = new Set('абвгдежзийклмнопрстуфхцчшщъыьэюя')
 const lives = 5
 const questions = [
@@ -374,6 +438,4 @@ const questions = [
 	},
 ]
 
-btnStartGame.addEventListener('click', () => {
-	new Hangman(questions, alphabet)
-})
+new Hangman(questions, alphabet, lives)
