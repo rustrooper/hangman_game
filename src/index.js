@@ -117,9 +117,6 @@ class Hangman {
 		this._livesNumberElement = this.createDOMElement('span', {
 			class: 'number',
 		})
-		this._keyboardElement = this.createDOMElement('div', {
-			class: 'keyboard',
-		})
 		this._resultElement = this.createDOMElement('span', {
 			class: 'game__result',
 		})
@@ -143,6 +140,37 @@ class Hangman {
 				class: 'game__result',
 			},
 			'Поздравляю! Вы отгадали все вопросы!'
+		)
+		this._keyboardElement = this.createDOMElement('div', {
+			class: 'keyboard',
+		})
+
+		this._alphabet.forEach(letter => {
+			const keyElement = this.createDOMElement(
+				'button',
+				{
+					class: 'keyboard__letter',
+				},
+				`${letter.toUpperCase()}`
+			)
+			this._letterButtonsMap.set(letter, keyElement)
+		})
+
+		this._mRestartWrap = this.createDOMElement('div', {
+			class: 'modal',
+			id: 'modal-restart',
+		})
+
+		this._mRestartContent = this.createDOMElement('span', {
+			class: 'modal__content',
+		})
+
+		this._mRestartBtn = this.createDOMElement(
+			'button',
+			{
+				class: 'btn btn_restart',
+			},
+			'Сыграть еще'
 		)
 	}
 
@@ -170,16 +198,18 @@ class Hangman {
 		}
 
 		const handleRestartButton = e => {
+			this.clearGame()
 			this.initNewGame()
 		}
 
 		const handleResetGameButton = e => {
 			localStorage.removeItem('solvedQuestionsIDs')
+			this.clearGame()
 			this.initNewGame()
 		}
 
 		this._keyboardElement.addEventListener('click', handleKeyButton)
-		this._restartBtnElement.addEventListener('click', handleRestartButton)
+		this._mRestartBtn.addEventListener('click', handleRestartButton)
 		this._resetBtnElement.addEventListener('click', handleResetGameButton)
 		this._startBtnElem.addEventListener('click', handleRestartButton)
 
@@ -204,7 +234,7 @@ class Hangman {
 		this.getRandomUnsolved()
 
 		if (!this._unsolvedQuestions.length) {
-			this.renderFinishedGame()
+			this.finishGame()
 			return
 		}
 
@@ -222,6 +252,9 @@ class Hangman {
 
 		this._guessedLetters.clear()
 		this._currentLives = this._initialLives
+		this._questionElement.textContent = `${this._currentQuestion}`
+		this._answerElement.textContent = `${this._displayAnswer.join('')}`
+		this._livesNumberElement.textContent = `${this._currentLives}`
 
 		this.renderNewGame()
 	}
@@ -237,12 +270,10 @@ class Hangman {
 
 	renderNewGame() {
 		this._gameContainer.innerHTML = ''
-		this._gameWrapperElement.innerHTML = ''
-		this._keyboardElement.innerHTML = ''
-		this._letterButtonsMap.clear()
-		this._scaffoldContainer.querySelectorAll('.open').forEach(child => {
-			child.classList.remove('open')
-		})
+
+		this._keyboardElement.append(...this._letterButtonsMap.values())
+
+		this._mRestartWrap.append(this._mRestartContent, this._mRestartBtn)
 
 		this._scaffoldContainer.append(
 			this._scaffoldBalkBottomElement,
@@ -254,24 +285,10 @@ class Hangman {
 			this._scaffoldGPTElement
 		)
 
-		this._questionElement.textContent = `${this._currentQuestion}`
-		this._answerElement.textContent = `${this._displayAnswer.join('')}`
-		this._livesNumberElement.textContent = `${this._currentLives}`
-
 		this._livesContainerElement.append(
 			this._livesHintElement,
 			this._livesNumberElement
 		)
-
-		this._alphabet.forEach(letter => {
-			const keyElement = document.createElement('button')
-			keyElement.classList.add('keyboard__letter')
-			keyElement.textContent = letter.toUpperCase()
-
-			this._letterButtonsMap.set(letter, keyElement)
-
-			this._keyboardElement.appendChild(keyElement)
-		})
 
 		this._gameWrapperElement.append(
 			this._questionElement,
@@ -282,8 +299,21 @@ class Hangman {
 
 		this._gameContainer.append(
 			this._gameWrapperElement,
-			this._scaffoldContainer
+			this._scaffoldContainer,
+			this._mRestartWrap
 		)
+	}
+
+	clearGame() {
+		this._mRestartWrap.classList.remove('modal_open')
+		this._scaffoldContainer.querySelectorAll('.open').forEach(child => {
+			child.classList.remove('open')
+		})
+		this._keyboardElement
+			.querySelectorAll('.keyboard__letter_red, .keyboard__letter_green')
+			.forEach(key => {
+				key.classList.remove('keyboard__letter_red', 'keyboard__letter_green')
+			})
 	}
 
 	guessLetter(letter) {
@@ -304,8 +334,8 @@ class Hangman {
 			this._currentAnswer.split('').forEach((char, index) => {
 				if (char === letter) {
 					this._displayAnswer[index] = letter
-					currentLetterElement.classList.add('keyboard__letter_green')
 				}
+				currentLetterElement.classList.add('keyboard__letter_green')
 			})
 		}
 
@@ -315,8 +345,6 @@ class Hangman {
 
 	checkGameStatus() {
 		if (!this._displayAnswer.includes('_')) {
-			this._gameWrapperElement.innerHTML = ''
-
 			this._solvedQuestionsIDs.add(
 				this._unsolvedQuestions[this._randomIndex].id
 			)
@@ -325,23 +353,13 @@ class Hangman {
 				JSON.stringify(Array.from(this._solvedQuestionsIDs))
 			)
 
-			this._resultElement.className = ''
-			this._resultElement.classList.add('game__result', 'game__result_win')
-			this._resultElement.textContent = 'WIN!'
-
-			this._gameWrapperElement.appendChild(this._resultElement)
-			this.renderRestartBtn()
+			this._mRestartContent.textContent = 'WIN!'
+			this._mRestartWrap.classList.add('modal_open')
 		}
 
 		if (this._currentLives <= 0) {
-			this._gameWrapperElement.innerHTML = ''
-
-			this._resultElement.className = ''
-			this._resultElement.classList.add('game__result', 'game__result_lose')
-			this._resultElement.textContent = 'GAME OVER.'
-
-			this._gameWrapperElement.appendChild(this._resultElement)
-			this.renderRestartBtn()
+			this._mRestartContent.textContent = 'GAME OVER.'
+			this._mRestartWrap.classList.add('modal_open')
 		}
 	}
 
@@ -377,15 +395,15 @@ class Hangman {
 		this._gameWrapperElement.appendChild(this._restartBtnElement)
 	}
 
-	renderFinishedGame() {
-		this._gameContainer.innerHTML = ''
-		this._gameWrapperElement.innerHTML = ''
+	finishGame() {
+		// this._gameContainer.innerHTML = ''
+		// this._gameWrapperElement.innerHTML = ''
 
-		this._finishedGameTextElement.classList.add('game__result')
-		this._finishedGameTextElement.textContent =
-			'Поздравляю! Вы отгадали все вопросы!'
-		this._resetBtnElement.classList.add('btn', 'btn_reset')
-		this._resetBtnElement.textContent = 'Начать заново'
+		// this._finishedGameTextElement.classList.add('game__result')
+		// this._finishedGameTextElement.textContent =
+		// 	'Поздравляю! Вы отгадали все вопросы!'
+		// this._resetBtnElement.classList.add('btn', 'btn_reset')
+		// this._resetBtnElement.textContent = 'Начать заново'
 
 		this._gameContainer.append(
 			this._finishedGameTextElement,
@@ -394,7 +412,6 @@ class Hangman {
 	}
 }
 
-// const btnStartGame = document.querySelector('.btn_start-game')
 const alphabet = new Set('абвгдежзийклмнопрстуфхцчшщъыьэюя')
 const lives = 5
 const questions = [
