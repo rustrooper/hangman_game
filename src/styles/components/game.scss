@@ -74,19 +74,4 @@
 			font-size: vars.$size-h1;
 		}
 	}
-
-	&__result {
-		font-size: vars.$size-hint;
-		font-weight: vars.$weight-black;
-		margin-top: 18rem;
-		margin-bottom: 2.5rem;
-
-		&_lose {
-			color: vars.$color-red;
-		}
-
-		&_win {
-			color: vars.$color-salad;
-		}
-	}
 }

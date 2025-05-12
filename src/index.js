@@ -161,7 +161,7 @@ class Hangman {
 			id: 'modal-restart',
 		})
 
-		this._mRestartContent = this.createDOMElement('span', {
+		this._mRestartContent = this.createDOMElement('div', {
 			class: 'modal__content',
 		})
 
@@ -197,21 +197,26 @@ class Hangman {
 			}
 		}
 
-		const handleRestartButton = e => {
+		const handleRestartBtn = e => {
 			this.clearGame()
 			this.initNewGame()
 		}
 
-		const handleResetGameButton = e => {
+		const handleResetBtn = e => {
 			localStorage.removeItem('solvedQuestionsIDs')
 			this.clearGame()
 			this.initNewGame()
 		}
 
+		const handleStartBtn = e => {
+			this.initNewGame()
+			this.renderNewGame()
+		}
+
 		this._keyboardElement.addEventListener('click', handleKeyButton)
-		this._mRestartBtn.addEventListener('click', handleRestartButton)
-		this._resetBtnElement.addEventListener('click', handleResetGameButton)
-		this._startBtnElem.addEventListener('click', handleRestartButton)
+		this._mRestartBtn.addEventListener('click', handleRestartBtn)
+		this._resetBtnElement.addEventListener('click', handleResetBtn)
+		this._startBtnElem.addEventListener('click', handleStartBtn)
 
 		document.addEventListener('keydown', e => {
 			this.guessLetter(e.key)
@@ -255,8 +260,6 @@ class Hangman {
 		this._questionElement.textContent = `${this._currentQuestion}`
 		this._answerElement.textContent = `${this._displayAnswer.join('')}`
 		this._livesNumberElement.textContent = `${this._currentLives}`
-
-		this.renderNewGame()
 	}
 
 	getRandomUnsolved() {
@@ -353,14 +356,18 @@ class Hangman {
 				JSON.stringify(Array.from(this._solvedQuestionsIDs))
 			)
 
-			this._mRestartContent.textContent = 'WIN!'
-			this._mRestartWrap.classList.add('modal_open')
+			this.openRestartModal('WIN!', 'modal__content_win')
 		}
 
 		if (this._currentLives <= 0) {
-			this._mRestartContent.textContent = 'GAME OVER.'
-			this._mRestartWrap.classList.add('modal_open')
+			this.openRestartModal('GAME OVER!', 'modal__content_lose')
 		}
+	}
+
+	openRestartModal(content, contentColor = '') {
+		this._mRestartContent.textContent = `${content}`
+		this._mRestartContent.classList.add(contentColor)
+		this._mRestartWrap.classList.add('modal_open')
 	}
 
 	updateState() {
