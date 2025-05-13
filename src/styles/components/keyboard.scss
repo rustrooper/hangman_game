@@ -22,5 +22,9 @@
 		&_green {
 			background-color: vars.$color-salad;
 		}
+
+		&_checked {
+			pointer-events: none;
+		}
 	}
 }

@@ -186,11 +186,8 @@ p {
     background-color: #128d06;
   }
 }
-.btn_restart {
+.btn_modal {
   margin-bottom: 2.5rem;
-}
-.btn_reset {
-  margin-bottom: 30rem;
 }
 
 .footer {
@@ -293,6 +290,9 @@ p {
 }
 .keyboard__letter_green {
   background-color: #89ce09;
+}
+.keyboard__letter_checked {
+  pointer-events: none;
 }
 
 .modal {
