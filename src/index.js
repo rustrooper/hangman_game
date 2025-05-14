@@ -22,27 +22,13 @@ class Hangman {
 	}
 
 	initDOMElements() {
-		this._gameMenu = this.createDOMElement('div', {
+		this._gContainerEl = document.querySelector('.game')
+
+		this._gMenuEl = this.createDOMElement('div', {
 			class: 'game__menu',
 		})
 
-		this._squareTopLeftElem = this.createDOMElement('span', {
-			class: 'square square_top-left',
-		})
-
-		this._squareTopRightElem = this.createDOMElement('span', {
-			class: 'square square_top-right',
-		})
-
-		this._squareBottomLeftElem = this.createDOMElement('span', {
-			class: 'square square_bottom-left',
-		})
-
-		this._squareBottomRightElem = this.createDOMElement('span', {
-			class: 'square square_bottom-right',
-		})
-
-		this._gameTitleElem = this.createDOMElement(
+		this._gTitleEl = this.createDOMElement(
 			'h1',
 			{
 				class: 'game__title',
@@ -50,7 +36,7 @@ class Hangman {
 			'IT виселица'
 		)
 
-		this._startBtnElem = this.createDOMElement(
+		this._gStartBtnEl = this.createDOMElement(
 			'button',
 			{
 				class: 'btn btn_start-game',
@@ -58,34 +44,50 @@ class Hangman {
 			'Новая игра'
 		)
 
-		this._scaffoldContainer = this.createDOMElement('div', {
+		this._sqTopLeftEl = this.createDOMElement('span', {
+			class: 'square square_top-left',
+		})
+
+		this._sqTopRightEl = this.createDOMElement('span', {
+			class: 'square square_top-right',
+		})
+
+		this._sqBottLeftEl = this.createDOMElement('span', {
+			class: 'square square_bottom-left',
+		})
+
+		this._sqBottRightEl = this.createDOMElement('span', {
+			class: 'square square_bottom-right',
+		})
+
+		this._scContainerEl = this.createDOMElement('div', {
 			class: 'scaffold',
 		})
 
-		this._scaffoldBalkBottomElement = this.createDOMElement('div', {
+		this._scBalkBottEl = this.createDOMElement('div', {
 			class: 'scaffold__balk scaffold__balk_bottom',
 		})
 
-		this._scaffoldBalkMiddleElement = this.createDOMElement('div', {
+		this._scBalkMidEl = this.createDOMElement('div', {
 			class: 'scaffold__balk scaffold__balk_middle',
 		})
 
-		this._scaffoldBalkTopElement = this.createDOMElement('div', {
+		this._scBalkTopEl = this.createDOMElement('div', {
 			class: 'scaffold__balk scaffold__balk_top',
 		})
-		this._scaffoldRopeElement = this.createDOMElement('img', {
+		this._scRopeEl = this.createDOMElement('img', {
 			class: 'scaffold__rope',
 			src: '/src/assets/icons/rope.svg',
 		})
-		this._scaffoldManAliveElement = this.createDOMElement('img', {
+		this._scManAliveEl = this.createDOMElement('img', {
 			class: 'scaffold__man',
 			src: '/src/assets/icons/vasia-alive.svg',
 		})
-		this._scaffoldManDeadElement = this.createDOMElement('img', {
+		this._scManDeadEl = this.createDOMElement('img', {
 			class: 'scaffold__man',
 			src: '/src/assets/icons/vasia-dead.svg',
 		})
-		this._scaffoldGPTElement = this.createDOMElement(
+		this._scGptEl = this.createDOMElement(
 			'span',
 			{
 				class: 'scaffold__gpt',
@@ -93,53 +95,52 @@ class Hangman {
 			'GPT'
 		)
 
-		this._gameContainer = document.querySelector('.game')
-		this._gameWrapperElement = this.createDOMElement('div', {
+		this._gWrapperEl = this.createDOMElement('div', {
 			class: 'game__wrapper',
 		})
-		this._questionElement = this.createDOMElement('p', {
+		this._questionEl = this.createDOMElement('p', {
 			class: 'game__question',
 		})
-		this._answerElement = this.createDOMElement('p', {
+		this._answerEl = this.createDOMElement('p', {
 			class: 'game__answer',
 		})
-		this._livesContainerElement = this.createDOMElement('div', {
+		this._lContainerEl = this.createDOMElement('div', {
 			class: 'game__lives',
 		})
-		this._livesHintElement = this.createDOMElement(
+		this._lHintEl = this.createDOMElement(
 			'p',
 			{
 				class: 'hint',
 			},
 			'Осталось попыток:'
 		)
-		this._livesNumberElement = this.createDOMElement('span', {
+		this._lNumberEl = this.createDOMElement('span', {
 			class: 'number',
 		})
-		this._resultElement = this.createDOMElement('span', {
-			class: 'game__result',
-		})
-		this._restartBtnElement = this.createDOMElement(
-			'button',
-			{
-				class: 'btn btn_restart',
-			},
-			'Сыграть еще'
-		)
-		this._resetBtnElement = this.createDOMElement(
-			'button',
-			{
-				class: 'btn btn_reset',
-			},
-			'Начать заново'
-		)
-		this._finishedGameTextElement = this.createDOMElement(
-			'span',
-			{
-				class: 'game__result',
-			},
-			'Поздравляю! Вы отгадали все вопросы!'
-		)
+		// this._resultEl = this.createDOMElement('span', {
+		// 	class: 'game__result',
+		// })
+		// this._restartBtnElement = this.createDOMElement(
+		// 	'button',
+		// 	{
+		// 		class: 'btn btn_restart',
+		// 	},
+		// 	'Сыграть еще'
+		// )
+		// this._resetBtnElement = this.createDOMElement(
+		// 	'button',
+		// 	{
+		// 		class: 'btn btn_reset',
+		// 	},
+		// 	'Начать заново'
+		// )
+		// this._finishedGameTextElement = this.createDOMElement(
+		// 	'span',
+		// 	{
+		// 		class: 'game__result',
+		// 	},
+		// 	'Поздравляю! Вы отгадали все вопросы!'
+		// )
 		this._keyboardElement = this.createDOMElement('div', {
 			class: 'keyboard',
 		})
@@ -210,8 +211,8 @@ class Hangman {
 
 		this._keyboardElement.addEventListener('click', handleKeyButton)
 		this._mBtnEl.addEventListener('click', handleRestartBtn)
-		this._resetBtnElement.addEventListener('click', handleResetBtn)
-		this._startBtnElem.addEventListener('click', handleStartBtn)
+		// this._resetBtnElement.addEventListener('click', handleResetBtn)
+		this._gStartBtnEl.addEventListener('click', handleStartBtn)
 
 		document.addEventListener('keydown', e => {
 			this.guessLetter(e.key)
@@ -219,15 +220,15 @@ class Hangman {
 	}
 
 	renderStartMenu() {
-		this._gameMenu.append(
-			this._squareTopLeftElem,
-			this._squareTopRightElem,
-			this._squareBottomLeftElem,
-			this._squareBottomRightElem,
-			this._gameTitleElem,
-			this._startBtnElem
+		this._gMenuEl.append(
+			this._sqTopLeftEl,
+			this._sqTopRightEl,
+			this._sqBottLeftEl,
+			this._sqBottRightEl,
+			this._gTitleEl,
+			this._gStartBtnEl
 		)
-		this._gameContainer.append(this._gameMenu)
+		this._gContainerEl.append(this._gMenuEl)
 	}
 
 	initNewGame() {
@@ -251,9 +252,9 @@ class Hangman {
 			.map(char => (char === ' ' ? ' ' : '_'))
 
 		this._currentLives = this._initialLives
-		this._questionElement.textContent = `${this._currentQuestion}`
-		this._answerElement.textContent = `${this._displayAnswer.join('')}`
-		this._livesNumberElement.textContent = `${this._currentLives}`
+		this._questionEl.textContent = `${this._currentQuestion}`
+		this._answerEl.textContent = `${this._displayAnswer.join('')}`
+		this._lNumberEl.textContent = `${this._currentLives}`
 	}
 
 	getRandomUnsolved() {
@@ -266,44 +267,44 @@ class Hangman {
 	}
 
 	renderGame() {
-		this._gameContainer.innerHTML = ''
+		this._gContainerEl.innerHTML = ''
 
 		this._keyboardElement.append(...this._letterButtonsMap.values())
 
 		this._mWrapEl.append(this._mContentEl, this._mBtnEl)
 
-		this._scaffoldContainer.append(
-			this._scaffoldBalkBottomElement,
-			this._scaffoldBalkMiddleElement,
-			this._scaffoldBalkTopElement,
-			this._scaffoldRopeElement,
-			this._scaffoldManAliveElement,
-			this._scaffoldManDeadElement,
-			this._scaffoldGPTElement
+		this._scContainerEl.append(
+			this._scBalkBottEl,
+			this._scBalkMidEl,
+			this._scBalkTopEl,
+			this._scRopeEl,
+			this._scManAliveEl,
+			this._scManDeadEl,
+			this._scGptEl
 		)
 
-		this._livesContainerElement.append(
-			this._livesHintElement,
-			this._livesNumberElement
-		)
+		this._lContainerEl.append(this._lHintEl, this._lNumberEl)
 
-		this._gameWrapperElement.append(
-			this._questionElement,
-			this._answerElement,
+		this._gWrapperEl.append(
+			this._questionEl,
+			this._answerEl,
 			this._keyboardElement,
-			this._livesContainerElement
+			this._lContainerEl
 		)
 
-		this._gameContainer.append(
-			this._gameWrapperElement,
-			this._scaffoldContainer,
+		this._gContainerEl.append(
+			this._gWrapperEl,
+			this._scContainerEl,
 			this._mWrapEl
 		)
 	}
 
 	clearGame() {
+		if (!this._unsolvedQuestions.length) {
+		}
+
 		this._mWrapEl.classList.remove('modal_open')
-		this._scaffoldContainer.querySelectorAll('.open').forEach(child => {
+		this._scContainerEl.querySelectorAll('.open').forEach(child => {
 			child.classList.remove('open')
 		})
 		this._keyboardElement
@@ -369,27 +370,27 @@ class Hangman {
 	}
 
 	updateState() {
-		this._livesNumberElement.textContent = `${this._currentLives}`
-		this._answerElement.textContent = `${this._displayAnswer.join('')}`
+		this._lNumberEl.textContent = `${this._currentLives}`
+		this._answerEl.textContent = `${this._displayAnswer.join('')}`
 		switch (this._currentLives) {
 			case 4:
-				this._scaffoldBalkBottomElement.classList.add('open')
+				this._scBalkBottEl.classList.add('open')
 				break
 			case 3:
-				this._scaffoldBalkMiddleElement.classList.add('open')
+				this._scBalkMidEl.classList.add('open')
 				break
 			case 2:
-				this._scaffoldBalkTopElement.classList.add('open')
+				this._scBalkTopEl.classList.add('open')
 				break
 			case 1:
-				this._scaffoldRopeElement.classList.add('open')
-				this._scaffoldManAliveElement.classList.add('open')
-				this._scaffoldGPTElement.classList.add('open')
+				this._scRopeEl.classList.add('open')
+				this._scManAliveEl.classList.add('open')
+				this._scGptEl.classList.add('open')
 				break
 			case 0:
-				this._scaffoldManAliveElement.classList.remove('open')
-				this._scaffoldGPTElement.classList.remove('open')
-				this._scaffoldManDeadElement.classList.add('open')
+				this._scManAliveEl.classList.remove('open')
+				this._scGptEl.classList.remove('open')
+				this._scManDeadEl.classList.add('open')
 				break
 		}
 	}
