@@ -295,8 +295,18 @@ p {
   pointer-events: none;
 }
 
-.modal {
+.modal_overlay {
   display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+.modal__inner {
+  display: block;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -307,6 +317,7 @@ p {
   box-shadow: 5px 5px 0 0 #131313, -5px -5px 0 0 #f3f3f3;
   overflow: auto;
   text-align: center;
+  z-index: 1001;
 }
 .modal__content {
   font-size: 3.5rem;

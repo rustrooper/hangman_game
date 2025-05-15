@@ -1,23 +1,35 @@
 @use '../variables.scss' as vars;
 
 .modal {
-	display: none;
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background-color: vars.$color-brown;
-	padding: 7.2rem 0;
-	// max-width: 50%;
-	width: 70rem;
-	box-shadow: 5px 5px 0 0 vars.$color-black, -5px -5px 0 0 vars.$color-white;
-	overflow: auto;
-	text-align: center;
+	&_overlay {
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: 1000;
+	}
+
+	&__inner {
+		display: block;
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-color: vars.$color-brown;
+		padding: 7.2rem 0;
+		width: 70rem;
+		box-shadow: 5px 5px 0 0 vars.$color-black, -5px -5px 0 0 vars.$color-white;
+		overflow: auto;
+		text-align: center;
+		z-index: 1001;
+	}
 
 	&__content {
 		font-size: vars.$size-hint;
 		font-weight: vars.$weight-black;
-		// margin-top: 18rem;
 		margin-bottom: 3rem;
 		text-align: center;
 
@@ -28,9 +40,6 @@
 		&_lose {
 			color: vars.$color-red;
 		}
-	}
-
-	&__footer {
 	}
 
 	&_open {

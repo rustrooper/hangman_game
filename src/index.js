@@ -156,9 +156,12 @@ class Hangman {
 			this._letterButtonsMap.set(letter, keyElement)
 		})
 
-		this._mWrapEl = this.createDOMElement('div', {
-			class: 'modal',
-			id: 'modal-restart',
+		this._mOverlayEl = this.createDOMElement('div', {
+			class: 'modal_overlay',
+		})
+
+		this._mInnerEl = this.createDOMElement('div', {
+			class: 'modal__inner',
 		})
 
 		this._mContentEl = this.createDOMElement('div', {
@@ -271,7 +274,8 @@ class Hangman {
 
 		this._keyboardElement.append(...this._letterButtonsMap.values())
 
-		this._mWrapEl.append(this._mContentEl, this._mBtnEl)
+		this._mInnerEl.append(this._mContentEl, this._mBtnEl)
+		this._mOverlayEl.append(this._mInnerEl)
 
 		this._scContainerEl.append(
 			this._scBalkBottEl,
@@ -295,15 +299,16 @@ class Hangman {
 		this._gContainerEl.append(
 			this._gWrapperEl,
 			this._scContainerEl,
-			this._mWrapEl
+			this._mOverlayEl
 		)
 	}
 
 	clearGame() {
 		if (!this._unsolvedQuestions.length) {
+			localStorage.removeItem('solvedQuestionsIDs')
 		}
 
-		this._mWrapEl.classList.remove('modal_open')
+		this._mOverlayEl.classList.remove('modal_open')
 		this._scContainerEl.querySelectorAll('.open').forEach(child => {
 			child.classList.remove('open')
 		})
@@ -328,16 +333,16 @@ class Hangman {
 
 		const isCorrect = this._currentAnswer.includes(letter)
 
-		if (!isCorrect) {
-			this._currentLives--
-			currentLetterElement.classList.add('keyboard__letter_red')
-		} else {
+		if (isCorrect) {
 			this._currentAnswer.split('').forEach((char, index) => {
 				if (char === letter) {
 					this._displayAnswer[index] = letter
 				}
 				currentLetterElement.classList.add('keyboard__letter_green')
 			})
+		} else {
+			this._currentLives--
+			currentLetterElement.classList.add('keyboard__letter_red')
 		}
 
 		this.checkGameStatus()
@@ -366,7 +371,7 @@ class Hangman {
 		this._mContentEl.textContent = `${content}`
 		this._mContentEl.className = `modal__content ${contentColor}`
 		this._mBtnEl.textContent = `${btnText}`
-		this._mWrapEl.classList.add('modal_open')
+		this._mOverlayEl.classList.add('modal_open')
 	}
 
 	updateState() {
