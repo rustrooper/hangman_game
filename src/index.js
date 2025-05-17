@@ -11,14 +11,16 @@ class Hangman {
 		this._alphabet = alphabet
 		this._initialLives = initialLives
 
-		this._currentQuestion
-		this._currentAnswer
+		this._curQuestion
+		this._curAnswer
 		this._displayAnswer
-		this._letterButtonsMap = new Map()
+		this._letterBtnsMap = new Map()
 		this._solvedQuestionsIDs
 		this._unsolvedQuestions
-		this._currentLives
+		this._curLives
 		this._randomIndex
+		this._scElementsArr
+		this._isGameActive = false
 	}
 
 	initDOMElements() {
@@ -65,28 +67,27 @@ class Hangman {
 		})
 
 		this._scBalkBottEl = this.createDOMElement('div', {
-			class: 'scaffold__balk scaffold__balk_bottom',
+			class: 'scaffold__balk scaffold__balk_bottom hidden',
 		})
 
 		this._scBalkMidEl = this.createDOMElement('div', {
-			class: 'scaffold__balk scaffold__balk_middle',
+			class: 'scaffold__balk scaffold__balk_middle hidden',
 		})
 
 		this._scBalkTopEl = this.createDOMElement('div', {
-			class: 'scaffold__balk scaffold__balk_top',
+			class: 'scaffold__balk scaffold__balk_top hidden',
 		})
+
 		this._scRopeEl = this.createDOMElement('img', {
 			class: 'scaffold__rope',
 			src: '/src/assets/icons/rope.svg',
 		})
-		this._scManAliveEl = this.createDOMElement('img', {
+
+		this._scVasiaEl = this.createDOMElement('img', {
 			class: 'scaffold__man',
 			src: '/src/assets/icons/vasia-alive.svg',
 		})
-		this._scManDeadEl = this.createDOMElement('img', {
-			class: 'scaffold__man',
-			src: '/src/assets/icons/vasia-dead.svg',
-		})
+
 		this._scGptEl = this.createDOMElement(
 			'span',
 			{
@@ -94,6 +95,16 @@ class Hangman {
 			},
 			'GPT'
 		)
+		this._scInnerEl = this.createDOMElement('div', {
+			class: 'scaffold__inner hidden',
+		})
+
+		this._scElementsArr = [
+			this._scBalkBottEl,
+			this._scBalkMidEl,
+			this._scBalkTopEl,
+			this._scInnerEl,
+		]
 
 		this._gWrapperEl = this.createDOMElement('div', {
 			class: 'game__wrapper',
@@ -117,31 +128,8 @@ class Hangman {
 		this._lNumberEl = this.createDOMElement('span', {
 			class: 'number',
 		})
-		// this._resultEl = this.createDOMElement('span', {
-		// 	class: 'game__result',
-		// })
-		// this._restartBtnElement = this.createDOMElement(
-		// 	'button',
-		// 	{
-		// 		class: 'btn btn_restart',
-		// 	},
-		// 	'Сыграть еще'
-		// )
-		// this._resetBtnElement = this.createDOMElement(
-		// 	'button',
-		// 	{
-		// 		class: 'btn btn_reset',
-		// 	},
-		// 	'Начать заново'
-		// )
-		// this._finishedGameTextElement = this.createDOMElement(
-		// 	'span',
-		// 	{
-		// 		class: 'game__result',
-		// 	},
-		// 	'Поздравляю! Вы отгадали все вопросы!'
-		// )
-		this._keyboardElement = this.createDOMElement('div', {
+
+		this._keyboardEl = this.createDOMElement('div', {
 			class: 'keyboard',
 		})
 
@@ -153,7 +141,7 @@ class Hangman {
 				},
 				`${letter.toUpperCase()}`
 			)
-			this._letterButtonsMap.set(letter, keyElement)
+			this._letterBtnsMap.set(letter, keyElement)
 		})
 
 		this._mOverlayEl = this.createDOMElement('div', {
@@ -191,18 +179,14 @@ class Hangman {
 
 	initGameHandlers() {
 		const handleKeyButton = e => {
-			if (e.target.classList.contains('keyboard__letter')) {
-				this.guessLetter(e.target.textContent)
+			if (this._isGameActive) {
+				if (e.target.classList.contains('keyboard__letter')) {
+					this.guessLetter(e.target.textContent)
+				}
 			}
 		}
 
 		const handleRestartBtn = e => {
-			this.clearGame()
-			this.initNewGame()
-		}
-
-		const handleResetBtn = e => {
-			localStorage.removeItem('solvedQuestionsIDs')
 			this.clearGame()
 			this.initNewGame()
 		}
@@ -212,13 +196,14 @@ class Hangman {
 			this.renderGame()
 		}
 
-		this._keyboardElement.addEventListener('click', handleKeyButton)
+		this._keyboardEl.addEventListener('click', handleKeyButton)
 		this._mBtnEl.addEventListener('click', handleRestartBtn)
-		// this._resetBtnElement.addEventListener('click', handleResetBtn)
 		this._gStartBtnEl.addEventListener('click', handleStartBtn)
 
 		document.addEventListener('keydown', e => {
-			this.guessLetter(e.key)
+			if (this._isGameActive) {
+				this.guessLetter(e.key)
+			}
 		})
 	}
 
@@ -238,7 +223,7 @@ class Hangman {
 		this.getRandomUnsolved()
 
 		if (!this._unsolvedQuestions.length) {
-			this.openModal('Начать заново', 'Поздравляю! Вы отгадали все вопросы!')
+			this.openModal('Начать заново', 'Поздравляю!\nВы отгадали все вопросы!')
 			return
 		}
 
@@ -247,17 +232,19 @@ class Hangman {
 		)
 
 		const { question, answer } = this._unsolvedQuestions[this._randomIndex]
-		this._currentQuestion = question
-		this._currentAnswer = answer.toLowerCase()
+		this._curQuestion = question
+		this._curAnswer = answer.toLowerCase()
 
-		this._displayAnswer = this._currentAnswer
+		this._displayAnswer = this._curAnswer
 			.split('')
 			.map(char => (char === ' ' ? ' ' : '_'))
 
-		this._currentLives = this._initialLives
-		this._questionEl.textContent = `${this._currentQuestion}`
+		this._curLives = this._initialLives
+		this._questionEl.textContent = `${this._curQuestion}`
 		this._answerEl.textContent = `${this._displayAnswer.join('')}`
-		this._lNumberEl.textContent = `${this._currentLives}`
+		this._lNumberEl.textContent = `${this._curLives}`
+
+		this._isGameActive = true
 	}
 
 	getRandomUnsolved() {
@@ -272,19 +259,17 @@ class Hangman {
 	renderGame() {
 		this._gContainerEl.innerHTML = ''
 
-		this._keyboardElement.append(...this._letterButtonsMap.values())
+		this._keyboardEl.append(...this._letterBtnsMap.values())
 
 		this._mInnerEl.append(this._mContentEl, this._mBtnEl)
 		this._mOverlayEl.append(this._mInnerEl)
 
+		this._scInnerEl.append(this._scRopeEl, this._scVasiaEl, this._scGptEl)
 		this._scContainerEl.append(
 			this._scBalkBottEl,
 			this._scBalkMidEl,
 			this._scBalkTopEl,
-			this._scRopeEl,
-			this._scManAliveEl,
-			this._scManDeadEl,
-			this._scGptEl
+			this._scInnerEl
 		)
 
 		this._lContainerEl.append(this._lHintEl, this._lNumberEl)
@@ -292,7 +277,7 @@ class Hangman {
 		this._gWrapperEl.append(
 			this._questionEl,
 			this._answerEl,
-			this._keyboardElement,
+			this._keyboardEl,
 			this._lContainerEl
 		)
 
@@ -309,10 +294,14 @@ class Hangman {
 		}
 
 		this._mOverlayEl.classList.remove('modal_open')
-		this._scContainerEl.querySelectorAll('.open').forEach(child => {
-			child.classList.remove('open')
+
+		this._scElementsArr.forEach(child => {
+			child.classList.add('hidden')
 		})
-		this._keyboardElement
+		this._scVasiaEl.src = '/src/assets/icons/vasia-alive.svg'
+		this._scGptEl.classList.remove('hidden')
+
+		this._keyboardEl
 			.querySelectorAll('.keyboard__letter_checked')
 			.forEach(key => {
 				key.classList.remove(
@@ -328,21 +317,21 @@ class Hangman {
 
 		if (!this._alphabet.has(letter)) return
 
-		const currentLetterElement = this._letterButtonsMap.get(letter)
-		currentLetterElement.classList.add('keyboard__letter_checked')
+		const curLetterEl = this._letterBtnsMap.get(letter)
+		curLetterEl.classList.add('keyboard__letter_checked')
 
-		const isCorrect = this._currentAnswer.includes(letter)
+		const isCorrect = this._curAnswer.includes(letter)
 
 		if (isCorrect) {
-			this._currentAnswer.split('').forEach((char, index) => {
+			this._curAnswer.split('').forEach((char, index) => {
 				if (char === letter) {
 					this._displayAnswer[index] = letter
 				}
-				currentLetterElement.classList.add('keyboard__letter_green')
+				curLetterEl.classList.add('keyboard__letter_green')
 			})
 		} else {
-			this._currentLives--
-			currentLetterElement.classList.add('keyboard__letter_red')
+			this._curLives--
+			curLetterEl.classList.add('keyboard__letter_red')
 		}
 
 		this.checkGameStatus()
@@ -362,42 +351,32 @@ class Hangman {
 			this.openModal('Сыграть ещё', 'WIN!', 'modal__content_win')
 		}
 
-		if (this._currentLives <= 0) {
+		if (this._curLives <= 0) {
 			this.openModal('Сыграть ещё', 'GAME OVER!', 'modal__content_lose')
 		}
 	}
 
 	openModal(btnText, content, contentColor = '') {
-		this._mContentEl.textContent = `${content}`
+		this._isGameActive = false
+
+		this._mContentEl.textContent = content
 		this._mContentEl.className = `modal__content ${contentColor}`
-		this._mBtnEl.textContent = `${btnText}`
+		this._mBtnEl.textContent = btnText
 		this._mOverlayEl.classList.add('modal_open')
 	}
 
 	updateState() {
-		this._lNumberEl.textContent = `${this._currentLives}`
+		this._lNumberEl.textContent = `${this._curLives}`
 		this._answerEl.textContent = `${this._displayAnswer.join('')}`
-		switch (this._currentLives) {
-			case 4:
-				this._scBalkBottEl.classList.add('open')
-				break
-			case 3:
-				this._scBalkMidEl.classList.add('open')
-				break
-			case 2:
-				this._scBalkTopEl.classList.add('open')
-				break
-			case 1:
-				this._scRopeEl.classList.add('open')
-				this._scManAliveEl.classList.add('open')
-				this._scGptEl.classList.add('open')
-				break
-			case 0:
-				this._scManAliveEl.classList.remove('open')
-				this._scGptEl.classList.remove('open')
-				this._scManDeadEl.classList.add('open')
-				break
+
+		if (this._curLives == 0) {
+			this._scVasiaEl.src = '/src/assets/icons/vasia-dead.svg'
+			this._scGptEl.classList.add('hidden')
+			return
 		}
+		this._scElementsArr[
+			this._scElementsArr.length - this._curLives
+		]?.classList.remove('hidden')
 	}
 }
 

@@ -32,6 +32,7 @@
 		font-weight: vars.$weight-black;
 		margin-bottom: 3rem;
 		text-align: center;
+		white-space: pre-line;
 
 		&_win {
 			color: vars.$color-salad;

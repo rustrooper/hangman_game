@@ -1,9 +1,7 @@
 @use '../variables.scss' as vars;
 
-%hidden-absolute {
+%absolute-transition {
 	position: absolute;
-	visibility: hidden;
-	opacity: 0;
 	transition: opacity 0.4s ease-in-out;
 }
 
@@ -12,8 +10,12 @@
 	width: 38.5rem;
 	height: 28.4rem;
 
+	&__inner {
+		transition: opacity 0.4s ease-in-out;
+	}
+
 	&__balk {
-		@extend %hidden-absolute;
+		@extend %absolute-transition;
 		background-color: vars.$color-brown;
 		border: 2px solid vars.$color-black;
 
@@ -37,7 +39,7 @@
 	}
 
 	&__rope {
-		@extend %hidden-absolute;
+		@extend %absolute-transition;
 		width: 1rem;
 		height: 6.6rem;
 		top: 2.5rem;
@@ -45,7 +47,7 @@
 	}
 
 	&__man {
-		@extend %hidden-absolute;
+		@extend %absolute-transition;
 		height: 13.784rem;
 		width: 7.047rem;
 		top: 82px;
@@ -53,15 +55,15 @@
 	}
 
 	&__gpt {
-		@extend %hidden-absolute;
+		@extend %absolute-transition;
 		font-size: vars.$size-gpt;
 		bottom: -33px;
 		right: 0;
 	}
 }
 
-.open {
-	visibility: visible;
-	opacity: 1;
+.hidden {
+	visibility: hidden;
+	opacity: 0;
 	transition: opacity 0.4s ease-in-out;
 }

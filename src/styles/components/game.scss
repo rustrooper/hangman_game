@@ -38,12 +38,14 @@
 	}
 
 	&__question {
+		text-align: center;
 		font-size: vars.$size-text;
 		font-weight: vars.$weight-black;
 		margin-bottom: 5.4rem;
 	}
 
 	&__answer {
+		text-align: center;
 		font-size: vars.$size-answer;
 		font-weight: vars.$weight-black;
 		margin-bottom: 2.4rem;

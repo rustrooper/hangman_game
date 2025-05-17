@@ -108,11 +108,13 @@ p {
   margin-bottom: 3rem;
 }
 .game__question {
+  text-align: center;
   font-size: 4rem;
   font-weight: 900;
   margin-bottom: 5.4rem;
 }
 .game__answer {
+  text-align: center;
   font-size: 7rem;
   font-weight: 900;
   margin-bottom: 2.4rem;
@@ -217,8 +219,6 @@ p {
 
 .scaffold__gpt, .scaffold__man, .scaffold__rope, .scaffold__balk {
   position: absolute;
-  visibility: hidden;
-  opacity: 0;
   transition: opacity 0.4s ease-in-out;
 }
 
@@ -226,6 +226,9 @@ p {
   position: relative;
   width: 38.5rem;
   height: 28.4rem;
+}
+.scaffold__inner {
+  transition: opacity 0.4s ease-in-out;
 }
 .scaffold__balk {
   background-color: #954a01;
@@ -264,9 +267,9 @@ p {
   right: 0;
 }
 
-.open {
-  visibility: visible;
-  opacity: 1;
+.hidden {
+  visibility: hidden;
+  opacity: 0;
   transition: opacity 0.4s ease-in-out;
 }
 
@@ -324,6 +327,7 @@ p {
   font-weight: 900;
   margin-bottom: 3rem;
   text-align: center;
+  white-space: pre-line;
 }
 .modal__content_win {
   color: #89ce09;
