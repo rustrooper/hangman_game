@@ -99,12 +99,7 @@ class Hangman {
 			class: 'scaffold__inner hidden',
 		})
 
-		this._scElementsArr = [
-			this._scBalkBottEl,
-			this._scBalkMidEl,
-			this._scBalkTopEl,
-			this._scInnerEl,
-		]
+		this._scElementsArr = [this._scBalkBottEl, this._scBalkMidEl, this._scBalkTopEl, this._scInnerEl]
 
 		this._gWrapperEl = this.createDOMElement('div', {
 			class: 'game__wrapper',
@@ -172,17 +167,15 @@ class Hangman {
 			}
 		}
 
-		if (typeof textContent === 'string') element.textContent = textContent
+		element.textContent = textContent
 
 		return element
 	}
 
 	initGameHandlers() {
 		const handleKeyButton = e => {
-			if (this._isGameActive) {
-				if (e.target.classList.contains('keyboard__letter')) {
-					this.guessLetter(e.target.textContent)
-				}
+			if (this._isGameActive && e.target.classList.contains('keyboard__letter')) {
+				this.guessLetter(e.target.textContent)
 			}
 		}
 
@@ -227,17 +220,13 @@ class Hangman {
 			return
 		}
 
-		this._randomIndex = Math.floor(
-			Math.random() * this._unsolvedQuestions.length
-		)
+		this._randomIndex = Math.floor(Math.random() * this._unsolvedQuestions.length)
 
-		const { question, answer } = this._unsolvedQuestions[this._randomIndex]
+		const {question, answer} = this._unsolvedQuestions[this._randomIndex]
 		this._curQuestion = question
 		this._curAnswer = answer.toLowerCase()
 
-		this._displayAnswer = this._curAnswer
-			.split('')
-			.map(char => (char === ' ' ? ' ' : '_'))
+		this._displayAnswer = this._curAnswer.split('').map(char => (char === ' ' ? ' ' : '_'))
 
 		this._curLives = this._initialLives
 		this._questionEl.textContent = `${this._curQuestion}`
@@ -248,12 +237,8 @@ class Hangman {
 	}
 
 	getRandomUnsolved() {
-		this._solvedQuestionsIDs = new Set(
-			JSON.parse(localStorage.getItem('solvedQuestionsIDs') || '[]')
-		)
-		this._unsolvedQuestions = this._questions.filter(
-			question => !this._solvedQuestionsIDs.has(question.id)
-		)
+		this._solvedQuestionsIDs = new Set(JSON.parse(localStorage.getItem('solvedQuestionsIDs') || '[]'))
+		this._unsolvedQuestions = this._questions.filter(question => !this._solvedQuestionsIDs.has(question.id))
 	}
 
 	renderGame() {
@@ -265,27 +250,13 @@ class Hangman {
 		this._mOverlayEl.append(this._mInnerEl)
 
 		this._scInnerEl.append(this._scRopeEl, this._scVasiaEl, this._scGptEl)
-		this._scContainerEl.append(
-			this._scBalkBottEl,
-			this._scBalkMidEl,
-			this._scBalkTopEl,
-			this._scInnerEl
-		)
+		this._scContainerEl.append(this._scBalkBottEl, this._scBalkMidEl, this._scBalkTopEl, this._scInnerEl)
 
 		this._lContainerEl.append(this._lHintEl, this._lNumberEl)
 
-		this._gWrapperEl.append(
-			this._questionEl,
-			this._answerEl,
-			this._keyboardEl,
-			this._lContainerEl
-		)
+		this._gWrapperEl.append(this._questionEl, this._answerEl, this._keyboardEl, this._lContainerEl)
 
-		this._gContainerEl.append(
-			this._gWrapperEl,
-			this._scContainerEl,
-			this._mOverlayEl
-		)
+		this._gContainerEl.append(this._gWrapperEl, this._scContainerEl, this._mOverlayEl)
 	}
 
 	clearGame() {
@@ -301,15 +272,9 @@ class Hangman {
 		this._scVasiaEl.src = '/src/assets/icons/vasia-alive.svg'
 		this._scGptEl.classList.remove('hidden')
 
-		this._keyboardEl
-			.querySelectorAll('.keyboard__letter_checked')
-			.forEach(key => {
-				key.classList.remove(
-					'keyboard__letter_red',
-					'keyboard__letter_green',
-					'keyboard__letter_checked'
-				)
-			})
+		this._keyboardEl.querySelectorAll('.keyboard__letter_checked').forEach(key => {
+			key.classList.remove('keyboard__letter_red', 'keyboard__letter_green', 'keyboard__letter_checked')
+		})
 	}
 
 	guessLetter(letter) {
@@ -340,13 +305,8 @@ class Hangman {
 
 	checkGameStatus() {
 		if (!this._displayAnswer.includes('_')) {
-			this._solvedQuestionsIDs.add(
-				this._unsolvedQuestions[this._randomIndex].id
-			)
-			localStorage.setItem(
-				'solvedQuestionsIDs',
-				JSON.stringify(Array.from(this._solvedQuestionsIDs))
-			)
+			this._solvedQuestionsIDs.add(this._unsolvedQuestions[this._randomIndex].id)
+			localStorage.setItem('solvedQuestionsIDs', JSON.stringify(Array.from(this._solvedQuestionsIDs)))
 
 			this.openModal('Сыграть ещё', 'WIN!', 'modal__content_win')
 		}
@@ -374,16 +334,14 @@ class Hangman {
 			this._scGptEl.classList.add('hidden')
 			return
 		}
-		this._scElementsArr[
-			this._scElementsArr.length - this._curLives
-		]?.classList.remove('hidden')
+		this._scElementsArr[this._scElementsArr.length - this._curLives]?.classList.remove('hidden')
 	}
 }
 
 const alphabet = new Set('абвгдежзийклмнопрстуфхцчшщъыьэюя')
 const lives = 5
 const questions = [
-	{ id: 1, question: 'Всё в javascript - это?', answer: 'объект' },
+	{id: 1, question: 'Всё в javascript - это?', answer: 'объект'},
 	{
 		id: 2,
 		question: 'Вёрстка, где элементы подстраиваются под размер экрана?',
@@ -401,14 +359,12 @@ const questions = [
 	},
 	{
 		id: 5,
-		question:
-			'Технология, которая позволяет обновлять часть страницы без перезагрузки',
+		question: 'Технология, которая позволяет обновлять часть страницы без перезагрузки',
 		answer: 'асинхронный запрос',
 	},
 	{
 		id: 6,
-		question:
-			'Специальные правила для адаптации сайта под мобильные устройства',
+		question: 'Специальные правила для адаптации сайта под мобильные устройства',
 		answer: 'медиа запросы',
 	},
 	{

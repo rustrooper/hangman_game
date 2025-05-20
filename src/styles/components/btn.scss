@@ -7,8 +7,8 @@
 	color: vars.$color-white;
 	font-size: vars.$size-text;
 	letter-spacing: 0.05em;
-	text-shadow: -2px -2px 0 vars.$color-black, 2px -2px 0 vars.$color-black,
-		-2px 2px 0 vars.$color-black, 2px 2px 0 vars.$color-black;
+	text-shadow: -2px -2px 0 vars.$color-black, 2px -2px 0 vars.$color-black, -2px 2px 0 vars.$color-black,
+		2px 2px 0 vars.$color-black;
 
 	@media (hover: hover) {
 		transition: all 0.3s ease-out;
@@ -29,8 +29,4 @@
 	&_modal {
 		margin-bottom: 2.5rem;
 	}
-
-	// &_reset {
-	// 	margin-bottom: 30rem;
-	// }
 }
