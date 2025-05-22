@@ -1,3 +1,5 @@
+// import gameConfig from './modules/consts.js'
+
 class Hangman {
 	constructor(questions, alphabet, initialLives) {
 		this.initConsts(questions, alphabet, initialLives)
