@@ -38,215 +38,173 @@ const questions = [
 		answer: 'ховер',
 	},
 ]
-const domConfig = {
-	elements: [
+
+const domMenuConfig = {
+	tagName: 'div',
+	className: 'game__menu',
+	children: [
 		{
-			tagName: 'div',
-			attributes: {
-				class: 'game__wrapper',
-			},
-			name: 'gWrapperEl',
+			tagName: 'span',
+			className: 'square square_top-left',
 		},
 		{
-			tagName: 'p',
-			attributes: {
-				class: 'game__question',
-			},
-			name: 'questionEl',
+			tagName: 'span',
+			className: 'square square_top-right',
 		},
 		{
-			tagName: 'p',
-			attributes: {
-				class: 'game__answer',
-			},
-			name: 'answerEl',
+			tagName: 'span',
+			className: 'square square_bottom-left',
 		},
 		{
-			tagName: 'div',
-			attributes: {
-				class: 'keyboard',
-			},
-			name: 'keyboardEl',
-		},
-		{
-			tagName: 'div',
-			attributes: {
-				class: 'modal_overlay',
-			},
-			name: 'mOverlayEl',
-		},
-		{
-			tagName: 'div',
-			attributes: {
-				class: 'modal__inner',
-			},
-			name: 'mInnerEl',
-		},
-		{
-			tagName: 'div',
-			attributes: {
-				class: 'modal__content',
-			},
-			name: 'mContentEl',
-		},
-		{
-			tagName: 'button',
-			attributes: {
-				class: 'btn btn_modal',
-			},
-			name: 'mBtnEl',
-		},
-	],
-	menu: [
-		{
-			tagName: 'div',
-			attributes: {
-				class: 'game__menu',
-			},
-			name: 'menu',
+			tagName: 'span',
+			className: 'square square_bottom-right',
 		},
 		{
 			tagName: 'h1',
-			attributes: {
-				class: 'game__title',
-			},
-			content: 'IT виселица',
-			name: 'title',
+			className: 'game__title',
+			textContent: 'IT виселица',
 		},
 		{
 			tagName: 'button',
-			attributes: {
-				class: 'btn btn_start-game',
-			},
-			content: 'Новая игра',
-			name: 'startBtn',
-		},
-		{
-			tagName: 'span',
-			attributes: {
-				class: 'square square_top-left',
-			},
-			name: 'squareTopLeft',
-		},
-		{
-			tagName: 'span',
-			attributes: {
-				class: 'square square_top-right',
-			},
-			name: 'squareTopRight',
-		},
-		{
-			tagName: 'span',
-			attributes: {
-				class: 'square square_bottom-left',
-			},
-			name: 'squareBottLeft',
-		},
-		{
-			tagName: 'span',
-			attributes: {
-				class: 'square square_bottom-right',
-			},
-			name: 'squareBottRight',
-		},
-	],
-	livesCounter: [
-		{
-			tagName: 'div',
-			attributes: {
-				class: 'game__lives',
-			},
-			name: 'container',
-		},
-		{
-			tagName: 'p',
-			attributes: {
-				class: 'hint',
-			},
-			content: 'Осталось попыток:',
-			name: 'hint',
-		},
-		{
-			tagName: 'span',
-			attributes: {
-				class: 'number',
-			},
-			name: 'number',
-		},
-	],
-	scaffold: [
-		{
-			tagName: 'div',
-			attributes: {
-				class: 'scaffold',
-			},
-			name: 'container',
-		},
-		{
-			tagName: 'div',
-			attributes: {
-				class: 'scaffold__balk scaffold__balk_bottom hidden',
-			},
-			name: 'balkBottom',
-			activeClass: 'hidden',
-		},
-		{
-			tagName: 'div',
-			attributes: {
-				class: 'scaffold__balk scaffold__balk_middle hidden',
-			},
-			name: 'balkMiddle',
-			activeClass: 'hidden',
-		},
-		{
-			tagName: 'div',
-			attributes: {
-				class: 'scaffold__balk scaffold__balk_top hidden',
-			},
-			name: 'balkTop',
-			activeClass: 'hidden',
-		},
-		{
-			tagName: 'img',
-			attributes: {
-				class: 'scaffold__rope',
-				src: '/src/assets/icons/rope.svg',
-			},
-			name: 'scRopeEl',
-			activeClass: 'hidden',
-		},
-		{
-			tagName: 'img',
-			attributes: {
-				class: 'scaffold__man',
-				src: '/src/assets/icons/vasia-alive.svg',
-			},
-			name: 'scVasiaEl',
-			activeClass: 'hidden',
-		},
-		{
-			tagName: 'span',
-			attributes: {
-				class: 'scaffold__gpt',
-			},
-			content: 'GPT',
-			name: 'scGptEl',
-			activeClass: 'hidden',
-		},
-		{
-			tagName: 'div',
-			attributes: {
-				class: 'scaffold__inner hidden',
-			},
-			name: 'scInnerEl',
-			activeClass: 'hidden',
+			className: 'btn btn_start-game',
+			textContent: 'Новая игра',
 		},
 	],
 }
+
+const domGameConfig = {
+	children: [
+		{
+			tagName: 'div',
+			className: 'game__wrapper',
+			children: [
+				{
+					tagName: 'p',
+					className: 'game__question',
+					textContent: 'Инструмент для проверки кода на ошибки',
+				},
+				{
+					tagName: 'p',
+					className: 'game__answer',
+					textContent: '______',
+				},
+				{
+					tagName: 'div',
+					className: 'keyboard',
+					children: Array.from('АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ').map(letter => ({
+						tagName: 'button',
+						className: 'keyboard__letter',
+						textContent: letter,
+					})),
+				},
+				{
+					tagName: 'div',
+					className: 'game__lives',
+					children: [
+						{
+							tagName: 'p',
+							className: 'hint',
+							textContent: 'Осталось попыток:',
+						},
+						{
+							tagName: 'span',
+							className: 'number',
+						},
+					],
+				},
+			],
+		},
+		{
+			tagName: 'div',
+			className: 'scaffold',
+			children: [
+				{
+					tagName: 'div',
+					className: 'scaffold__balk scaffold__balk_bottom hidden',
+				},
+				{
+					tagName: 'div',
+					className: 'scaffold__balk scaffold__balk_middle hidden',
+				},
+				{
+					tagName: 'div',
+					className: 'scaffold__balk scaffold__balk_top hidden',
+				},
+				{
+					tagName: 'div',
+					className: 'scaffold__inner hidden',
+					children: [
+						{
+							tagName: 'img',
+							className: 'scaffold__rope',
+							src: '/src/assets/icons/rope.svg',
+						},
+						{
+							tagName: 'img',
+							className: 'scaffold__man',
+							src: '/src/assets/icons/vasia-alive.svg',
+						},
+						{
+							tagName: 'span',
+							className: 'scaffold__gpt',
+							textContent: 'GPT',
+						},
+					],
+				},
+			],
+		},
+		{
+			tagName: 'div',
+			className: 'modal_overlay',
+			children: [
+				{
+					tagName: 'div',
+					className: 'modal__inner',
+					children: [
+						{
+							tagName: 'div',
+							className: 'modal__content',
+						},
+						{
+							tagName: 'button',
+							className: 'btn btn_modal',
+						},
+					],
+				},
+			],
+		},
+	],
+}
+
+const domClasses = {
+	btnStart: 'btn_start-game',
+	btnModal: 'btn_modal',
+	keyboard: 'keyboard',
+	keyLetter: 'keyboard__letter',
+	question: 'game__question',
+	answer: 'game__answer',
+	counter: 'number',
+	keyChecked: 'keyboard__letter_checked',
+	keyGreen: 'keyboard__letter_green',
+	keyRed: 'keyboard__letter_red',
+	vasia: 'scaffold__man',
+	gpt: 'scaffold__gpt',
+	scaffold: 'scaffold',
+	hidden: 'hidden',
+	modal: 'modal_overlay',
+	modalContent: 'modal__content',
+	modalOpen: 'modal_open',
+	modalWin: 'modal__content_win',
+	modalLose: 'modal__content_lose',
+}
+
+const sources = {}
 
 export default {
 	alphabet,
 	lives,
 	questions,
-	domConfig,
+	domClasses,
+	domMenuConfig: JSON.stringify(domMenuConfig),
+	domGameConfig: JSON.stringify(domGameConfig),
 }
