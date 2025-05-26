@@ -1,5 +1,5 @@
 import AppConfig from './modules/consts.js'
-const {domClasses} = AppConfig
+const {domClasses, sources, elementsContent} = AppConfig
 
 class Hangman {
 	constructor() {
@@ -9,7 +9,7 @@ class Hangman {
 	}
 
 	initConsts() {
-		this._gameContainer = document.querySelector('.game')
+		this._gameContainer = document.querySelector(`.${game}`)
 
 		this._questions = AppConfig.questions
 		this._alphabet = AppConfig.alphabet
@@ -117,7 +117,7 @@ class Hangman {
 		this.getUnsolvedQuestions()
 
 		if (!this._unsolvedQuestions.length) {
-			this.openModal('Начать заново', 'Поздравляю!\nВы отгадали все вопросы!')
+			this.openModal(elementsContent.restartGame, elementsContent.congratulations)
 			return
 		}
 
@@ -152,7 +152,7 @@ class Hangman {
 		this._scaffoldArr.forEach(child => {
 			child.classList.add(domClasses.hidden)
 		})
-		this._vasiaImg.src = '/src/assets/icons/vasia-alive.svg'
+		this._vasiaImg.src = sources.vasiaDead
 		this._gptImg.classList.remove(domClasses.hidden)
 
 		this._keyboardEl.querySelectorAll(`.${domClasses.keyChecked}`).forEach(key => {
@@ -192,11 +192,11 @@ class Hangman {
 			this._solvedQuestionsIDs.add(this._unsolvedQuestions[this._randomIndex].id)
 			localStorage.setItem('solvedQuestionsIDs', JSON.stringify(Array.from(this._solvedQuestionsIDs)))
 
-			this.openModal('Сыграть ещё', 'WIN!', domClasses.modalWin)
+			this.openModal(elementsContent.playAgain, elementsContent.win, domClasses.modalWin)
 		}
 
 		if (this._curLives <= 0) {
-			this.openModal('Сыграть ещё', 'GAME OVER!', domClasses.modalLose)
+			this.openModal(elementsContent.playAgain, elementsContent.lose, domClasses.modalLose)
 		}
 	}
 
@@ -214,7 +214,7 @@ class Hangman {
 		this._answerEl.textContent = `${this._displayAnswer.join('')}`
 
 		if (this._curLives == 0) {
-			this._vasiaImg.src = '/src/assets/icons/vasia-dead.svg'
+			this._vasiaImg.src = sources.vasiaDead
 			this._gptImg.classList.add(domClasses.hidden)
 			return
 		}

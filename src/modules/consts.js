@@ -177,6 +177,7 @@ const domGameConfig = {
 }
 
 const domClasses = {
+	container: 'game',
 	btnStart: 'btn_start-game',
 	btnModal: 'btn_modal',
 	keyboard: 'keyboard',
@@ -198,13 +199,26 @@ const domClasses = {
 	modalLose: 'modal__content_lose',
 }
 
-const sources = {}
+const sources = {
+	vasiaDead: '/src/assets/icons/vasia-dead.svg',
+	vasiaAlive: '/src/assets/icons/vasia-alive.svg',
+}
+
+const elementsContent = {
+	playAgain: 'Сыграть ещё',
+	win: 'WIN!',
+	lose: 'GAME OVER!',
+	restartGame: 'Начать заново',
+	congratulations: 'Поздравляю!\nВы отгадали все вопросы!',
+}
 
 export default {
 	alphabet,
 	lives,
 	questions,
 	domClasses,
+	sources,
+	elementsContent,
 	domMenuConfig: JSON.stringify(domMenuConfig),
 	domGameConfig: JSON.stringify(domGameConfig),
 }
