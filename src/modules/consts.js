@@ -81,12 +81,10 @@ const domGameConfig = {
 				{
 					tagName: 'p',
 					className: 'game__question',
-					textContent: 'Инструмент для проверки кода на ошибки',
 				},
 				{
 					tagName: 'p',
 					className: 'game__answer',
-					textContent: '______',
 				},
 				{
 					tagName: 'div',
@@ -212,6 +210,10 @@ const elementsContent = {
 	congratulations: 'Поздравляю!\nВы отгадали все вопросы!',
 }
 
+const localStorageKeys = {
+	questionsIds: 'solvedQuestionsIDs',
+}
+
 export default {
 	alphabet,
 	lives,
@@ -219,6 +221,7 @@ export default {
 	domClasses,
 	sources,
 	elementsContent,
+	localStorageKeys,
 	domMenuConfig: JSON.stringify(domMenuConfig),
 	domGameConfig: JSON.stringify(domGameConfig),
 }

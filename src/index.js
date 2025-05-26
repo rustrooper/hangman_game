@@ -1,15 +1,18 @@
 import AppConfig from './modules/consts.js'
 const {domClasses, sources, elementsContent} = AppConfig
+import StorageService from './modules/storageService.js'
 
 class Hangman {
 	constructor() {
-		this.initConsts()
-		this.initGameHandlers()
-		this.renderStartMenu()
+		this.#initConsts()
+		this.#initGameHandlers()
+		this.#renderStartMenu()
 	}
 
-	initConsts() {
-		this._gameContainer = document.querySelector(`.${game}`)
+	#initConsts() {
+		this._gameContainer = document.querySelector(`.${domClasses.container}`)
+
+		this._storageService = new StorageService(AppConfig.localStorageKeys.questionsIds)
 
 		this._questions = AppConfig.questions
 		this._alphabet = AppConfig.alphabet
@@ -19,7 +22,6 @@ class Hangman {
 		this._curAnswer
 		this._displayAnswer
 		this._letterBtnsMap = new Map()
-		this._solvedQuestionsIDs
 		this._unsolvedQuestions
 		this._curLives
 		this._randomIndex
@@ -27,47 +29,47 @@ class Hangman {
 		this._isGameActive = false
 	}
 
-	initGameHandlers() {
+	#initGameHandlers() {
 		this.handleKeyScreenBtn = e => {
 			if (this._isGameActive && e.target.matches(`.${domClasses.keyLetter}`)) {
-				this.guessLetter(e.target.textContent)
+				this.#guessLetter(e.target.textContent)
 			}
 		}
 
 		this.handleKeyBtn = e => {
 			if (this._isGameActive) {
-				this.guessLetter(e.key)
+				this.#guessLetter(e.key)
 			}
 		}
 
 		this.handleRestartBtn = () => {
-			this.clearGame()
-			this.initNewGame()
+			this.#clearGame()
+			this.#initNewGame()
 		}
 
 		this.handleStartBtn = () => {
-			this.renderGame()
-			this.initNewGame()
+			this.#renderGame()
+			this.#initNewGame()
 		}
 	}
 
-	setGameListeners() {
+	#setGameListeners() {
 		this._keyboardEl.addEventListener('click', this.handleKeyScreenBtn)
 		this._modalBtn.addEventListener('click', this.handleRestartBtn)
 		document.addEventListener('keydown', this.handleKeyBtn)
 	}
 
-	cacheElements() {
-		this._questionEl = document.querySelector(`.${domClasses.question}`)
-		this._answerEl = document.querySelector(`.${domClasses.answer}`)
-		this._livesCounterEl = document.querySelector(`.${domClasses.counter}`)
-		this._keyboardEl = document.querySelector(`.${domClasses.keyboard}`)
-		this._scaffold = document.querySelector(`.${domClasses.scaffold}`)
-		this._vasiaImg = document.querySelector(`.${domClasses.vasia}`)
-		this._gptImg = document.querySelector(`.${domClasses.gpt}`)
-		this._modal = document.querySelector(`.${domClasses.modal}`)
-		this._modalContent = document.querySelector(`.${domClasses.modalContent}`)
-		this._modalBtn = document.querySelector(`.${domClasses.btnModal}`)
+	#cacheElements() {
+		this._questionEl = this._gameContainer.querySelector(`.${domClasses.question}`)
+		this._answerEl = this._gameContainer.querySelector(`.${domClasses.answer}`)
+		this._livesCounterEl = this._gameContainer.querySelector(`.${domClasses.counter}`)
+		this._keyboardEl = this._gameContainer.querySelector(`.${domClasses.keyboard}`)
+		this._scaffold = this._gameContainer.querySelector(`.${domClasses.scaffold}`)
+		this._vasiaImg = this._gameContainer.querySelector(`.${domClasses.vasia}`)
+		this._gptImg = this._gameContainer.querySelector(`.${domClasses.gpt}`)
+		this._modal = this._gameContainer.querySelector(`.${domClasses.modal}`)
+		this._modalContent = this._gameContainer.querySelector(`.${domClasses.modalContent}`)
+		this._modalBtn = this._gameContainer.querySelector(`.${domClasses.btnModal}`)
 
 		this._letterBtnsMap = new Map(
 			Array.from(this._keyboardEl.children).map(button => {
@@ -79,7 +81,7 @@ class Hangman {
 		this._scaffoldArr = Array.from(this._scaffold.children)
 	}
 
-	createDOMElement(config) {
+	#createDOMElement(config) {
 		const element = document.createElement(config.tagName)
 		if (config.className) element.className = config.className
 		if (config.textContent) element.textContent = config.textContent
@@ -87,37 +89,37 @@ class Hangman {
 
 		if (config.children) {
 			config.children.forEach(child => {
-				element.appendChild(this.createDOMElement(child))
+				element.appendChild(this.#createDOMElement(child))
 			})
 		}
 
 		return element
 	}
 
-	renderStartMenu() {
+	#renderStartMenu() {
 		this._gameContainer.innerHTML = ''
 
-		const element = this.createDOMElement(JSON.parse(AppConfig.domMenuConfig))
+		const element = this.#createDOMElement(JSON.parse(AppConfig.domMenuConfig))
 		this._gameContainer.append(element)
 		document.querySelector(`.${domClasses.btnStart}`).addEventListener('click', this.handleStartBtn)
 	}
 
-	renderGame() {
+	#renderGame() {
 		this._gameContainer.innerHTML = ''
 
 		JSON.parse(AppConfig.domGameConfig).children.forEach(child => {
-			const element = this.createDOMElement(child)
+			const element = this.#createDOMElement(child)
 			this._gameContainer.append(element)
 		})
-		this.cacheElements()
-		this.setGameListeners()
+		this.#cacheElements()
+		this.#setGameListeners()
 	}
 
-	initNewGame() {
-		this.getUnsolvedQuestions()
+	#initNewGame() {
+		this.#getUnsolvedQuestions()
 
 		if (!this._unsolvedQuestions.length) {
-			this.openModal(elementsContent.restartGame, elementsContent.congratulations)
+			this.#openModal(elementsContent.restartGame, elementsContent.congratulations)
 			return
 		}
 
@@ -137,14 +139,13 @@ class Hangman {
 		this._isGameActive = true
 	}
 
-	getUnsolvedQuestions() {
-		this._solvedQuestionsIDs = new Set(JSON.parse(localStorage.getItem('solvedQuestionsIDs') || '[]'))
-		this._unsolvedQuestions = this._questions.filter(question => !this._solvedQuestionsIDs.has(question.id))
+	#getUnsolvedQuestions() {
+		this._unsolvedQuestions = this._questions.filter(question => !this._storageService.hasItem(question.id))
 	}
 
-	clearGame() {
+	#clearGame() {
 		if (!this._unsolvedQuestions.length) {
-			localStorage.removeItem('solvedQuestionsIDs')
+			this._storageService.clear()
 		}
 
 		this._modal.classList.remove(domClasses.modalOpen)
@@ -160,7 +161,7 @@ class Hangman {
 		})
 	}
 
-	guessLetter(letter) {
+	#guessLetter(letter) {
 		letter = letter.toLowerCase()
 
 		if (!this._alphabet.has(letter)) return
@@ -183,24 +184,23 @@ class Hangman {
 			curLetterEl.classList.add(domClasses.keyRed)
 		}
 
-		this.checkGameStatus()
-		this.updateState()
+		this.#checkGameStatus()
+		this.#updateState()
 	}
 
-	checkGameStatus() {
+	#checkGameStatus() {
 		if (!this._displayAnswer.includes('_')) {
-			this._solvedQuestionsIDs.add(this._unsolvedQuestions[this._randomIndex].id)
-			localStorage.setItem('solvedQuestionsIDs', JSON.stringify(Array.from(this._solvedQuestionsIDs)))
+			this._storageService.addItem(this._unsolvedQuestions[this._randomIndex].id)
 
-			this.openModal(elementsContent.playAgain, elementsContent.win, domClasses.modalWin)
+			this.#openModal(elementsContent.playAgain, elementsContent.win, domClasses.modalWin)
 		}
 
 		if (this._curLives <= 0) {
-			this.openModal(elementsContent.playAgain, elementsContent.lose, domClasses.modalLose)
+			this.#openModal(elementsContent.playAgain, elementsContent.lose, domClasses.modalLose)
 		}
 	}
 
-	openModal(btnText, content, contentColor = '') {
+	#openModal(btnText, content, contentColor = '') {
 		this._isGameActive = false
 
 		this._modalContent.textContent = content
@@ -209,7 +209,7 @@ class Hangman {
 		this._modal.classList.add(domClasses.modalOpen)
 	}
 
-	updateState() {
+	#updateState() {
 		this._livesCounterEl.textContent = `${this._curLives}`
 		this._answerEl.textContent = `${this._displayAnswer.join('')}`
 
@@ -218,6 +218,7 @@ class Hangman {
 			this._gptImg.classList.add(domClasses.hidden)
 			return
 		}
+
 		this._scaffold.children[this._scaffold.children.length - this._curLives]?.classList.remove(domClasses.hidden)
 	}
 }
