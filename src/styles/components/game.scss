@@ -1,0 +1,79 @@
+@use '../variables.scss' as vars;
+
+.game {
+	display: flex;
+	justify-content: end;
+	flex-direction: column;
+	width: 100%;
+	max-width: 80rem;
+	flex: 2;
+	align-items: center;
+	position: relative;
+
+	&__wrapper {
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		width: 100%;
+		max-width: 80rem;
+		align-items: center;
+		position: relative;
+	}
+
+	&__menu {
+		position: relative;
+		padding: 7.2rem 0;
+		background-color: vars.$color-brown;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 100%;
+		box-shadow: 5px 5px 0 0 vars.$color-black, -5px -5px 0 0 vars.$color-white;
+		margin-bottom: 28rem;
+		margin-top: 18rem;
+	}
+
+	&__title {
+		margin-bottom: 3rem;
+	}
+
+	&__question {
+		text-align: center;
+		font-size: vars.$size-text;
+		font-weight: vars.$weight-black;
+		margin-bottom: 5.4rem;
+	}
+
+	&__answer {
+		text-align: center;
+		font-size: vars.$size-answer;
+		font-weight: vars.$weight-black;
+		margin-bottom: 2.4rem;
+		letter-spacing: vars.$letter-spacing-answer;
+	}
+
+	&__keyboard {
+		margin-bottom: 5rem;
+	}
+
+	&__lives {
+		position: absolute;
+		right: -22rem;
+		top: 26rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		max-width: 22rem;
+
+		.hint {
+			font-size: vars.$size-hint;
+			font-weight: vars.$weight-black;
+			margin-left: 2rem;
+		}
+
+		.number {
+			font-size: vars.$size-h1;
+		}
+	}
+}

@@ -1,0 +1,29 @@
+@use '../variables.scss' as vars;
+
+.square {
+	width: 1.524rem;
+	height: 1.524rem;
+	background-color: vars.$color-white;
+	box-shadow: 2px 2px 0 0 vars.$color-black;
+	position: absolute;
+
+	&_top-left {
+		top: 2.5rem;
+		left: 2.5rem;
+	}
+
+	&_top-right {
+		top: 2.5rem;
+		right: 2.5rem;
+	}
+
+	&_bottom-left {
+		bottom: 2.5rem;
+		left: 2.5rem;
+	}
+
+	&_bottom-right {
+		bottom: 2.5rem;
+		right: 2.5rem;
+	}
+}

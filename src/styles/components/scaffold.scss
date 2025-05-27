@@ -1,0 +1,69 @@
+@use '../variables.scss' as vars;
+
+%absolute-transition {
+	position: absolute;
+	transition: opacity 0.4s ease-in-out;
+}
+
+.scaffold {
+	position: relative;
+	width: 38.5rem;
+	height: 28.4rem;
+
+	&__inner {
+		transition: opacity 0.4s ease-in-out;
+	}
+
+	&__balk {
+		@extend %absolute-transition;
+		background-color: vars.$color-brown;
+		border: 2px solid vars.$color-black;
+
+		&_bottom {
+			width: 14rem;
+			height: 2.5rem;
+			bottom: -2px;
+		}
+
+		&_middle {
+			height: 25.8rem;
+			width: 2.5rem;
+			bottom: 21px;
+			left: 13px;
+		}
+
+		&_top {
+			width: 30rem;
+			height: 2.5rem;
+		}
+	}
+
+	&__rope {
+		@extend %absolute-transition;
+		width: 1rem;
+		height: 6.6rem;
+		top: 2.5rem;
+		right: 95px;
+	}
+
+	&__man {
+		@extend %absolute-transition;
+		height: 13.784rem;
+		width: 7.047rem;
+		top: 82px;
+		right: 66px;
+	}
+
+	&__gpt {
+		@extend %absolute-transition;
+		font-size: vars.$size-gpt;
+		bottom: -33px;
+		right: 0;
+	}
+}
+
+.hidden {
+	visibility: hidden;
+	opacity: 0;
+	transition: opacity 0.4s ease-in-out;
+}

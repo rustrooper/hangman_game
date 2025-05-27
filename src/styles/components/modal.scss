@@ -1,0 +1,49 @@
+@use '../variables.scss' as vars;
+
+.modal {
+	&_overlay {
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: vars.$z-overlay;
+	}
+
+	&__inner {
+		display: block;
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-color: vars.$color-brown;
+		padding: 7.2rem 0;
+		width: 70rem;
+		box-shadow: 5px 5px 0 0 vars.$color-black, -5px -5px 0 0 vars.$color-white;
+		overflow: auto;
+		text-align: center;
+		z-index: vars.$z-inner;
+	}
+
+	&__content {
+		font-size: vars.$size-hint;
+		font-weight: vars.$weight-black;
+		margin-bottom: 3rem;
+		text-align: center;
+		white-space: pre-line;
+
+		&_win {
+			color: vars.$color-salad;
+		}
+
+		&_lose {
+			color: vars.$color-red;
+		}
+	}
+
+	&_open {
+		display: block;
+	}
+}

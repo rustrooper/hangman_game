@@ -1,0 +1,63 @@
+@use '../variables.scss' as vars;
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: vars.$font-size-base;
+	font-family: vars.$font-family;
+}
+
+body {
+	display: flex;
+	justify-content: center;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	min-height: 100vh;
+	letter-spacing: 0.5em;
+	color: vars.$color-white;
+	background: linear-gradient(
+		to bottom,
+		vars.$color-blue,
+		vars.$color-dark-blue
+	);
+	text-shadow: -1px -2px 2px vars.$color-black, 1px -2px 2px vars.$color-black,
+		-1px 2px 2px vars.$color-black, 1px 2px 2px vars.$color-black;
+	overflow-x: hidden;
+}
+
+.page {
+	display: flex;
+	justify-content: end;
+	flex-direction: column;
+	width: 100%;
+	max-width: 144rem;
+	padding-top: 2rem;
+	align-items: center;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+button,
+span {
+	font-family: vars.$font-family;
+	font-weight: vars.$weight-black;
+	margin: 0;
+}
+
+h1 {
+	font-size: vars.$size-h1;
+}
+
+button {
+	cursor: pointer;
+}
+
+p {
+	margin: 0;
+}

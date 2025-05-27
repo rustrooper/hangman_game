@@ -1,2 +1,10 @@
 @use './fonts.scss';
-@use './components/hangman.scss';
+@use './components/common.scss';
+@use './components/header.scss';
+@use './components/game.scss';
+@use './components/square.scss';
+@use './components/btn.scss';
+@use './components/footer.scss';
+@use './components/scaffold.scss';
+@use './components/keyboard.scss';
+@use './components/modal.scss';
