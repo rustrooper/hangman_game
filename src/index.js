@@ -22,6 +22,7 @@ class Hangman {
 		this._curAnswer
 		this._displayAnswer
 		this._letterBtnsMap = new Map()
+		this._guessedLetters = new Set()
 		this._unsolvedQuestions
 		this._curLives
 		this._randomIndex
@@ -153,21 +154,24 @@ class Hangman {
 		this._scaffoldArr.forEach(child => {
 			child.classList.add(domClasses.hidden)
 		})
-		this._vasiaImg.src = sources.vasiaDead
+		this._vasiaImg.src = sources.vasiaAlive
 		this._gptImg.classList.remove(domClasses.hidden)
 
 		this._keyboardEl.querySelectorAll(`.${domClasses.keyChecked}`).forEach(key => {
 			key.classList.remove(domClasses.keyRed, domClasses.keyGreen, domClasses.keyChecked)
 		})
+
+		this._guessedLetters.clear()
 	}
 
 	#guessLetter(letter) {
 		letter = letter.toLowerCase()
 
-		if (!this._alphabet.has(letter)) return
+		if (!this._alphabet.has(letter) || this._guessedLetters.has(letter)) return
+
+		this._guessedLetters.add(letter)
 
 		const curLetterEl = this._letterBtnsMap.get(letter)
-
 		curLetterEl.classList.add(domClasses.keyChecked)
 
 		const isCorrect = this._curAnswer.includes(letter)
